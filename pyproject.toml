@@ -50,5 +50,5 @@ testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py38"
 line-length = 100
