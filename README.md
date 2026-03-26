@@ -31,16 +31,12 @@ Every node is content-addressed (SHA-256), cryptographically signed (Ed25519), a
 ## Install
 
 ```bash
-pip install lattice-core
-```
-
-Or from source:
-
-```bash
 git clone https://github.com/alibhutto69/lattice.git
 cd lattice
-pip install -e .
+pip install cryptography click rich
 ```
+
+PyPI package (`pip install lattice-core`) coming soon.
 
 ## Quick Start
 
