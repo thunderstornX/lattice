@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="Inter, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <marker id="a3" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7" fill="#3b82f6"/></marker>
+    <marker id="a3g" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><path d="M0,0 L10,3.5 L0,7" fill="#10b981"/></marker>
+    <filter id="sh3"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
+  </defs>
+
+  <rect width="900" height="400" rx="12" fill="url(#bg3)"/>
+  <text x="450" y="35" text-anchor="middle" fill="#f1f5f9" font-size="20" font-weight="700">How a Claim Gets Created</text>
+
+  <!-- Step 1 -->
+  <rect x="30" y="70" width="160" height="80" rx="10" fill="#334155" stroke="#3b82f6" stroke-width="2" filter="url(#sh3)"/>
+  <text x="110" y="100" text-anchor="middle" fill="#60a5fa" font-size="12" font-weight="700">1. AGENT CALL</text>
+  <text x="110" y="118" text-anchor="middle" fill="#94a3b8" font-size="10">harvester.claim(</text>
+  <text x="110" y="132" text-anchor="middle" fill="#94a3b8" font-size="10">"domain → IP")</text>
+
+  <line x1="190" y1="110" x2="230" y2="110" stroke="#3b82f6" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Step 2 -->
+  <rect x="235" y="70" width="160" height="80" rx="10" fill="#334155" stroke="#3b82f6" stroke-width="2" filter="url(#sh3)"/>
+  <text x="315" y="100" text-anchor="middle" fill="#60a5fa" font-size="12" font-weight="700">2. HASH</text>
+  <text x="315" y="118" text-anchor="middle" fill="#94a3b8" font-size="10">SHA-256 of</text>
+  <text x="315" y="132" text-anchor="middle" fill="#94a3b8" font-size="10">canonical JSON</text>
+
+  <line x1="395" y1="110" x2="435" y2="110" stroke="#3b82f6" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Step 3 -->
+  <rect x="440" y="70" width="160" height="80" rx="10" fill="#334155" stroke="#8b5cf6" stroke-width="2" filter="url(#sh3)"/>
+  <text x="520" y="100" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="700">3. SIGN</text>
+  <text x="520" y="118" text-anchor="middle" fill="#94a3b8" font-size="10">Ed25519 signature</text>
+  <text x="520" y="132" text-anchor="middle" fill="#94a3b8" font-size="10">over claim_id</text>
+
+  <line x1="600" y1="110" x2="640" y2="110" stroke="#3b82f6" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- Step 4 -->
+  <rect x="645" y="70" width="160" height="80" rx="10" fill="#334155" stroke="#10b981" stroke-width="2" filter="url(#sh3)"/>
+  <text x="725" y="100" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">4. STORE</text>
+  <text x="725" y="118" text-anchor="middle" fill="#94a3b8" font-size="10">SQLite INSERT</text>
+  <text x="725" y="132" text-anchor="middle" fill="#94a3b8" font-size="10">.lattice/lattice.db</text>
+
+  <!-- Annotation boxes below -->
+  <!-- Content addressing explanation -->
+  <rect x="30" y="190" width="400" height="90" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="50" y="215" fill="#f59e0b" font-size="12" font-weight="700">Content Addressing</text>
+  <text x="50" y="235" fill="#94a3b8" font-size="11">claim_id = SHA-256({agent_id, assertion, evidence,</text>
+  <text x="50" y="252" fill="#94a3b8" font-size="11">method, timestamp, metadata})</text>
+  <text x="50" y="270" fill="#64748b" font-size="10">Same inputs always produce the same hash. Change anything, hash changes.</text>
+
+  <!-- Signing explanation -->
+  <rect x="470" y="190" width="400" height="90" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="490" y="215" fill="#8b5cf6" font-size="12" font-weight="700">Cryptographic Signing</text>
+  <text x="490" y="235" fill="#94a3b8" font-size="11">signature = Ed25519_sign(private_key, claim_id)</text>
+  <text x="490" y="255" fill="#64748b" font-size="10">Anyone with the public key can verify:</text>
+  <text x="490" y="270" fill="#64748b" font-size="10">1) This agent made this claim. 2) It hasn't been modified.</text>
+
+  <!-- Verification flow at bottom -->
+  <rect x="30" y="310" width="840" height="70" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="450" y="335" text-anchor="middle" fill="#34d399" font-size="13" font-weight="700">Verification (lattice verify)</text>
+  <text x="450" y="358" text-anchor="middle" fill="#a7f3d0" font-size="11">For each claim: fetch agent's public key → Ed25519_verify(public_key, claim_id, signature) → PASS or FAIL</text>
+  <text x="450" y="372" text-anchor="middle" fill="#6ee7b7" font-size="10">If any claim was modified after creation, its hash changes and the signature no longer matches.</text>
+</svg>

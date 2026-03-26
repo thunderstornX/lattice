@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LATTICE - One Pager</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    width: 210mm;
+    height: 297mm;
+    padding: 18mm 20mm;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #3b82f6;
+  }
+
+  .header h1 {
+    font-size: 28pt;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .header .tagline {
+    font-size: 12pt;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+
+  .header .author {
+    font-size: 9pt;
+    color: #64748b;
+    margin-top: 6px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .card {
+    background: #1e293b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #334155;
+  }
+
+  .card.full { grid-column: 1 / -1; }
+
+  .card h2 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card h2 .icon { font-size: 14pt; }
+
+  .card.problem h2 { color: #f87171; }
+  .card.solution h2 { color: #4ade80; }
+  .card.how h2 { color: #60a5fa; }
+  .card.demo h2 { color: #fbbf24; }
+  .card.why h2 { color: #a78bfa; }
+  .card.tech h2 { color: #2dd4bf; }
+
+  .card p, .card li {
+    font-size: 9.5pt;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    padding: 2px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .card ul li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #64748b;
+  }
+
+  .trace {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    background: #0f172a;
+    border-radius: 6px;
+    padding: 10px 12px;
+    line-height: 1.6;
+    margin-top: 6px;
+    border: 1px solid #1e293b;
+  }
+
+  .trace .high { color: #4ade80; }
+  .trace .mid { color: #fbbf24; }
+  .trace .blue { color: #60a5fa; }
+  .trace .green { color: #34d399; }
+
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .stat {
+    flex: 1;
+    text-align: center;
+    background: #0f172a;
+    border-radius: 6px;
+    padding: 8px 6px;
+  }
+
+  .stat .number {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #3b82f6;
+  }
+
+  .stat .label {
+    font-size: 8pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #334155;
+    font-size: 9pt;
+    color: #64748b;
+  }
+
+  .footer a {
+    color: #3b82f6;
+    text-decoration: none;
+  }
+
+  .pill {
+    display: inline-block;
+    background: #334155;
+    color: #94a3b8;
+    font-size: 8pt;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin: 2px 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔗 LATTICE</h1>
+  <div class="tagline">Accountability Layer for Multi-Agent AI Systems</div>
+  <div class="author">Ali Murtaza Bhutto | ORCID: 0009-0007-2787-943X | MIT License | March 2026</div>
+</div>
+
+<div class="grid">
+
+  <div class="card problem">
+    <h2><span class="icon">⚠️</span> The Problem</h2>
+    <p>Multi-agent AI systems produce conclusions but can't explain how they got there. When your pipeline says "this domain is malicious," there's no way to:</p>
+    <ul>
+      <li>Trace that conclusion back to raw evidence</li>
+      <li>Verify nothing was fabricated or modified</li>
+      <li>Identify which agent made each assertion</li>
+      <li>Assess what happens if one data point is wrong</li>
+    </ul>
+    <p style="margin-top: 6px; font-size: 9pt; color: #94a3b8;">No existing agent framework (LangGraph, CrewAI, AutoGen) provides standardized accountability infrastructure.</p>
+  </div>
+
+  <div class="card solution">
+    <h2><span class="icon">✅</span> The Solution</h2>
+    <p>LATTICE records every agent decision as a <strong>content-addressed</strong>, <strong>cryptographically signed</strong> Claim in a Directed Acyclic Graph.</p>
+    <ul>
+      <li><strong>SHA-256 hashing</strong> makes claims tamper-evident</li>
+      <li><strong>Ed25519 signatures</strong> bind claims to agents</li>
+      <li><strong>DAG structure</strong> connects conclusions to evidence</li>
+      <li><strong>Confidence tracking</strong> on every assertion</li>
+    </ul>
+    <p style="margin-top: 6px; font-size: 9pt; color: #94a3b8;">Not an agent framework. An accountability layer that sits underneath any framework.</p>
+  </div>
+
+  <div class="card demo full">
+    <h2><span class="icon">🔍</span> Demo: OSINT Investigation Trace</h2>
+    <p>Three agents investigate a suspicious domain. Every finding is recorded. The final report traces back to raw tool output:</p>
+    <div class="trace">
+<span class="blue">ASSESSMENT</span>: Likely threat actor (<span class="mid">conf: 0.75</span>, reporter)<br>
+&nbsp;&nbsp;└─ <span class="blue">Bulletproof hosting</span> (<span class="mid">conf: 0.80</span>, analyzer)<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="blue">Resolves to 198.51.100.42</span> (<span class="high">conf: 0.99</span>, harvester) → <span class="green">[DNS]</span><br>
+&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="blue">ShadyRegistrar, Panama</span> (<span class="high">conf: 0.95</span>, harvester) → <span class="green">[WHOIS]</span><br>
+&nbsp;&nbsp;└─ <span class="blue">Threat actor TTP pattern</span> (<span class="mid">conf: 0.70</span>, analyzer)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="blue">nginx + PHP + tracking</span> (<span class="high">conf: 0.99</span>, harvester) → <span class="green">[HTTP]</span><br>
+<br>
+<span class="high">✓ 6/6 signatures verified</span> &nbsp; <span class="high">✓ 0 unsupported claims</span> &nbsp; <span class="high">✓ 0 broken refs</span>
+    </div>
+  </div>
+
+  <div class="card how">
+    <h2><span class="icon">⚡</span> How It Works</h2>
+    <ul>
+      <li><strong>Agent registers</strong> with auto-generated Ed25519 keypair</li>
+      <li><strong>Raw evidence stored</strong> as content-addressed blob</li>
+      <li><strong>Agent creates claim</strong> referencing evidence by hash</li>
+      <li><strong>Claim hashed</strong> (SHA-256 of canonical JSON)</li>
+      <li><strong>Claim signed</strong> (Ed25519 over the hash)</li>
+      <li><strong>Stored in SQLite</strong> DAG</li>
+      <li><strong>Trace/Audit/Verify</strong> at any time</li>
+    </ul>
+  </div>
+
+  <div class="card why">
+    <h2><span class="icon">💡</span> Why It Matters</h2>
+    <ul>
+      <li><strong>Security consulting:</strong> clients need auditable reasoning, not "the AI said so"</li>
+      <li><strong>OSINT/Journalism:</strong> Bellingcat-grade source attribution for automated pipelines</li>
+      <li><strong>EU AI Act:</strong> explainability requirement for high-risk AI systems</li>
+      <li><strong>Legal proceedings:</strong> provenance is everything in digital evidence</li>
+      <li><strong>Research:</strong> reproducible, inspectable investigative methodology</li>
+    </ul>
+  </div>
+
+  <div class="card tech full">
+    <h2><span class="icon">🛠️</span> Technical Details</h2>
+    <div class="stats-row">
+      <div class="stat"><div class="number">3</div><div class="label">Dependencies</div></div>
+      <div class="stat"><div class="number">~1,850</div><div class="label">Lines of Code</div></div>
+      <div class="stat"><div class="number">41</div><div class="label">Tests Passing</div></div>
+      <div class="stat"><div class="number">0</div><div class="label">Cloud Services</div></div>
+      <div class="stat"><div class="number">8</div><div class="label">CLI Commands</div></div>
+    </div>
+    <div style="margin-top: 10px;">
+      <span class="pill">Python 3.8+</span>
+      <span class="pill">SQLite</span>
+      <span class="pill">SHA-256</span>
+      <span class="pill">Ed25519</span>
+      <span class="pill">Click</span>
+      <span class="pill">Rich</span>
+      <span class="pill">MIT License</span>
+      <span class="pill">Offline-First</span>
+      <span class="pill">Framework-Agnostic</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>github.com/alibhutto69/lattice</strong> &nbsp;|&nbsp; Open Source &nbsp;|&nbsp; MIT License &nbsp;|&nbsp; pip install lattice-core
+</div>
+
+</body>
+</html>

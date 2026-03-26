@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LATTICE: A Content-Addressed Accountability Protocol for Multi-Agent Intelligence Systems</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --border: #e2e8f0;
+    --code-bg: #f8fafc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #1a1a2e;
+    background: #ffffff;
+    line-height: 1.7;
+    font-size: 11pt;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 25mm;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: #1a1a2e;
+  }
+
+  h2 {
+    font-size: 15pt;
+    font-weight: 700;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    color: #1a1a2e;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 4px;
+  }
+
+  h3 {
+    font-size: 12pt;
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: #334155;
+  }
+
+  p { margin-bottom: 10px; }
+
+  .author-block {
+    margin: 16px 0 24px;
+    padding: 16px 20px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    border-left: 4px solid #2563eb;
+  }
+
+  .author-block .name {
+    font-size: 13pt;
+    font-weight: 600;
+  }
+
+  .author-block .details {
+    color: #64748b;
+    font-size: 10pt;
+    margin-top: 4px;
+  }
+
+  .abstract {
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  .abstract h3 {
+    color: #2563eb;
+    margin-top: 0;
+  }
+
+  .keywords {
+    font-size: 10pt;
+    color: #64748b;
+    margin-top: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 10pt;
+  }
+
+  th {
+    background: #f1f5f9;
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    background: #f8fafc;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #e2e8f0;
+  }
+
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    
+    line-height: 1.5;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  .diagram {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .diagram img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .diagram .caption {
+    font-size: 9pt;
+    color: #64748b;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .trace-box {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9pt;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+
+  .trace-box .conf-high { color: #4ade80; }
+  .trace-box .conf-mid { color: #fbbf24; }
+  .trace-box .agent { color: #60a5fa; }
+  .trace-box .evidence { color: #34d399; }
+
+  .footnote {
+    font-size: 9pt;
+    color: #64748b;
+  }
+
+  .references {
+    font-size: 10pt;
+  }
+
+  .references p {
+    margin-bottom: 6px;
+    padding-left: 20px;
+    text-indent: -20px;
+  }
+
+  .page-break { page-break-before: always; }
+
+  .spec-table td:first-child {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .gap-table th:nth-child(1) { width: 25%; }
+  .gap-table th:nth-child(2) { width: 25%; }
+  .gap-table th:nth-child(3) { width: 50%; }
+</style>
+</head>
+<body>
+
+<h1>LATTICE: A Content-Addressed Accountability Protocol for Multi-Agent Intelligence Systems</h1>
+
+<div class="author-block">
+  <div class="name">Ali Murtaza Bhutto</div>
+  <div class="details">
+    ORCID: 0009-0007-2787-943X<br>
+    MS Cybersecurity, SZABIST University | OSINT Engineer, AlphaSearch Inc.<br>
+    March 2026
+  </div>
+</div>
+
+<div class="abstract">
+  <h3>Abstract</h3>
+  <p>Multi-agent AI systems increasingly drive investigative workflows in cybersecurity, OSINT, and threat intelligence. These systems produce conclusions but cannot explain how they reached them. When an automated pipeline flags a domain as malicious or attributes a campaign to a threat actor, there is no standardized mechanism to trace that conclusion backward through the chain of evidence, verify that no step was fabricated, or assess how sensitive the result is to the removal of any single data point.</p>
+  <p>This paper introduces LATTICE (Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution), an open-source Python library that addresses this gap. LATTICE provides a lightweight accountability layer that sits beneath any agent framework. Every agent action produces a Claim: a content-addressed, cryptographically signed assertion that references its supporting evidence through a Directed Acyclic Graph. The result is a complete, tamper-evident reasoning chain from final conclusions down to raw tool output.</p>
+  <p>We describe the architecture, demonstrate its application in a multi-agent OSINT investigation, and argue that accountability infrastructure is a prerequisite for trustworthy multi-agent systems in security-critical domains.</p>
+  <div class="keywords"><strong>Keywords:</strong> multi-agent systems, provenance, OSINT, accountability, content-addressing, digital forensics, explainable AI</div>
+</div>
+
+<h2>1. Introduction</h2>
+
+<p>The adoption of multi-agent AI architectures in cybersecurity and intelligence work has accelerated rapidly. Frameworks like LangGraph, CrewAI, and AutoGen allow practitioners to decompose complex investigative tasks across specialized agents: one for data collection, another for analysis, a third for report synthesis. The appeal is clear. Complex investigations involve heterogeneous data sources, require multiple analytical perspectives, and benefit from parallelized execution.</p>
+
+<p>But these frameworks share a fundamental limitation. They are built around <em>orchestration</em> (how agents communicate) rather than <em>accountability</em> (why agents concluded what they did). The output of a multi-agent pipeline is typically a final report or a structured summary. The intermediate reasoning, the evidence that was considered and discarded, the confidence levels at each step, and the identity of the agent responsible for each assertion are lost or buried in unstructured logs.</p>
+
+<p>This matters for three concrete reasons:</p>
+
+<p><strong>Professional credibility.</strong> In security consulting, handing a client a report that says "our AI found this vulnerability" without an auditable reasoning chain is professionally inadequate. The client needs to understand the basis for each finding, assess its reliability, and make informed decisions about remediation.</p>
+
+<p><strong>Investigative integrity.</strong> In OSINT and investigative journalism, an unverifiable claim is worse than no claim at all, because it carries the false authority of a technical system. Organizations like Bellingcat, Mediapart, and the EU DisinfoLab have established rigorous standards for source attribution and methodology transparency. Automated pipelines that cannot meet these standards are not useful to them.</p>
+
+<p><strong>Regulatory compliance.</strong> The EU AI Act (Regulation 2024/1689) requires that high-risk AI systems provide explanations of their outputs. A claim DAG with full provenance and confidence metadata is a natural format for meeting this requirement.</p>
+
+<p>LATTICE addresses this by treating accountability as a system-level property rather than an afterthought.</p>
+
+<h2>2. Related Work</h2>
+
+<h3>2.1 Agent Observability Platforms</h3>
+<p>LangSmith (LangChain), LangFuse, Arize Phoenix, and Weights & Biases Prompts provide monitoring and tracing for LLM-based applications. These platforms focus on operational observability: latency, token counts, error rates, prompt/response pairs. They answer "what happened?" but not "why should we believe this conclusion?" More critically, they are cloud-hosted proprietary services. In security consulting and intelligence work, sending client data and investigation artifacts to third-party APIs is often prohibited by contract, regulation, or basic operational security.</p>
+
+<h3>2.2 Data Provenance Standards</h3>
+<p>The W3C PROV specification (Moreau & Missier, 2013) provides a general data model for provenance. PROV defines entities, activities, and agents, along with relationships like "wasGeneratedBy" and "wasDerivedFrom." The model is mature and well-specified, but it was designed for data lineage in scientific workflows, not for reasoning chains in adversarial contexts. It does not natively handle confidence distributions, cryptographic verification, or the specific needs of multi-agent AI pipelines.</p>
+
+<h3>2.3 Structured Analytic Techniques</h3>
+<p>The intelligence community has developed Structured Analytic Techniques (SATs) such as Analysis of Competing Hypotheses (ACH), Devil's Advocacy, and Red Team/Blue Team analysis (Heuer & Pherson, 2010). These techniques formalize aspects of reasoning relevant to any multi-agent system: maintaining competing hypotheses, challenging assumptions, documenting alternative explanations. However, these techniques exist as human-oriented methodologies, not as machine-enforceable protocols.</p>
+
+<h3>2.4 The Gap</h3>
+
+<table class="gap-table">
+  <tr><th>Property</th><th>Existing Tools</th><th>LATTICE</th></tr>
+  <tr><td>Content-addressed immutability</td><td>Git (for code, not reasoning)</td><td>Every claim hashed by content</td></tr>
+  <tr><td>Cryptographic agent attribution</td><td>None in agent frameworks</td><td>Ed25519 signature per claim</td></tr>
+  <tr><td>Confidence as first-class primitive</td><td>None standardized</td><td>Float [0.0, 1.0] on every claim</td></tr>
+  <tr><td>DAG-structured reasoning chains</td><td>LangSmith traces (flat, proprietary)</td><td>Full backward-traversable DAG</td></tr>
+  <tr><td>Offline / local-first</td><td>Most require cloud</td><td>Pure SQLite, zero network</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2>3. Architecture</h2>
+
+<h3>3.1 Design Principles</h3>
+
+<p><strong>Minimality.</strong> LATTICE depends only on Python's standard library plus three packages (<code>cryptography</code>, <code>click</code>, <code>rich</code>). Storage is SQLite. There is no external service, no cloud dependency, no daemon to manage.</p>
+
+<p><strong>Framework agnosticism.</strong> LATTICE is not an agent framework. It does not orchestrate agents, manage conversations, or handle tool calls. It records what agents did and why. This means it can sit underneath LangGraph, CrewAI, AutoGen, or raw Python scripts without requiring changes to the agent logic itself.</p>
+
+<p><strong>Verifiability by default.</strong> Every Claim is content-addressed (SHA-256) and signed (Ed25519) at creation time. There is no "opt-in" to accountability; it is the default behavior.</p>
+
+<p><strong>Offline-first.</strong> The entire system runs locally. Investigation data, agent keys, and the reasoning DAG never leave the machine unless the user explicitly exports them.</p>
+
+<h3>3.2 System Overview</h3>
+
+<div class="diagram">
+  <img src="images/architecture-overview.svg" alt="LATTICE Architecture Overview">
+  <div class="caption">Figure 1: LATTICE architecture. The accountability layer sits between your agents and the output surface.</div>
+</div>
+
+<h3>3.3 Core Primitives</h3>
+
+<p><strong>Evidence</strong> is a content-addressed blob of raw data: tool output, API responses, DNS records, WHOIS results, or any other artifact. Evidence is identified by the SHA-256 hash of its content. Storing the same data twice is idempotent.</p>
+
+<p><strong>Claim</strong> is the fundamental unit of the DAG. A Claim represents an assertion made by a specific agent, supported by specific evidence:</p>
+
+<table class="spec-table">
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>claim_id</code></td><td>string</td><td>SHA-256 hash of canonical JSON of all content fields</td></tr>
+  <tr><td><code>agent_id</code></td><td>string</td><td>Identifier of the originating agent</td></tr>
+  <tr><td><code>assertion</code></td><td>string</td><td>Human-readable statement of what is claimed</td></tr>
+  <tr><td><code>evidence</code></td><td>list[string]</td><td>Claim IDs or Evidence IDs this depends on</td></tr>
+  <tr><td><code>confidence</code></td><td>float</td><td>Value in [0.0, 1.0]</td></tr>
+  <tr><td><code>method</code></td><td>string</td><td>Derivation method (e.g., <code>tool:nslookup</code>, <code>llm:analysis</code>)</td></tr>
+  <tr><td><code>timestamp</code></td><td>float</td><td>Unix timestamp of creation</td></tr>
+  <tr><td><code>metadata</code></td><td>dict</td><td>Arbitrary key-value pairs</td></tr>
+  <tr><td><code>signature</code></td><td>string</td><td>Hex-encoded Ed25519 signature over <code>claim_id</code></td></tr>
+</table>
+
+<p>The <code>claim_id</code> is computed deterministically from the content fields using canonical JSON serialization (sorted keys, no whitespace). Same inputs always produce the same ID. Any modification produces a different hash, making tampering detectable.</p>
+
+<p><strong>Agent</strong> is a registered entity with an Ed25519 keypair. When a claim is created, the private key signs the <code>claim_id</code>. Any party with the public key can verify that the claim was produced by that specific agent and has not been modified.</p>
+
+<h3>3.4 How a Claim Gets Created</h3>
+
+<div class="diagram">
+  <img src="images/data-flow.svg" alt="Claim Creation Flow">
+  <div class="caption">Figure 2: Every claim passes through hash, sign, store. There is no shortcut that skips accountability.</div>
+</div>
+
+<h3>3.5 The Claim DAG</h3>
+
+<p>Claims reference other claims and evidence through the <code>evidence</code> field, forming a Directed Acyclic Graph. Leaf nodes are raw evidence blobs. Intermediate nodes are derived claims. Root nodes are final conclusions. Walking backward from any root traverses the complete reasoning chain.</p>
+
+<div class="diagram">
+  <img src="images/claim-dag.svg" alt="Claim DAG Example">
+  <div class="caption">Figure 3: A complete investigation DAG. Every node is content-addressed and signed. Every edge is a cryptographic reference.</div>
+</div>
+
+<div class="page-break"></div>
+
+<h2>4. Demonstration: OSINT Investigation Pipeline</h2>
+
+<p>To illustrate LATTICE in practice, we instrument a three-agent OSINT investigation targeting a suspicious domain.</p>
+
+<div class="diagram">
+  <img src="images/pipeline-demo.svg" alt="Three-Agent Pipeline">
+  <div class="caption">Figure 4: Three-phase investigation pipeline. Each phase produces signed claims that reference the previous phase.</div>
+</div>
+
+<h3>4.1 Agent Configuration</h3>
+
+<table>
+  <tr><th>Agent</th><th>Role</th><th>Methods</th></tr>
+  <tr><td>Harvester</td><td>Collector</td><td>DNS lookup, WHOIS query, HTTP header inspection</td></tr>
+  <tr><td>Analyzer</td><td>Analyst</td><td>Infrastructure correlation, TTP pattern matching</td></tr>
+  <tr><td>Reporter</td><td>Reporter</td><td>Risk assessment synthesis</td></tr>
+</table>
+
+<h3>4.2 Implementation</h3>
+
+<pre><code>import lattice
+
+store = lattice.init(":memory:")
+harvester = store.agent("harvester", role="collector")
+analyzer  = store.agent("analyzer",  role="analyst")
+reporter  = store.agent("reporter",  role="reporter")
+
+# Phase 1: Collection
+dns_eid = store.evidence("nslookup output: 198.51.100.42")
+dns_claim = harvester.claim(
+    "suspicious-domain.example resolves to 198.51.100.42",
+    evidence=[dns_eid], confidence=0.99, method="tool:nslookup"
+)
+
+# Phase 2: Analysis
+infra_claim = analyzer.claim(
+    "Bulletproof hosting detected (ns1.bulletproof-hosting.example)",
+    evidence=[dns_claim.claim_id, whois_claim.claim_id],
+    confidence=0.80, method="llm:correlation"
+)
+
+# Phase 3: Report
+report = reporter.claim(
+    "ASSESSMENT: Likely threat actor. Recommend blocking.",
+    evidence=[infra_claim.claim_id, actor_claim.claim_id],
+    confidence=0.75, method="human:assessment"
+)
+
+# Trace the full chain
+chain = store.trace(report.claim_id)</code></pre>
+
+<h3>4.3 Trace Output</h3>
+
+<div class="trace-box">
+<span class="agent">ASSESSMENT</span>: Likely threat actor (<span class="conf-mid">conf: 0.75</span>, reporter)<br>
+&nbsp;&nbsp;└─ <span class="agent">Bulletproof hosting detected</span> (<span class="conf-mid">conf: 0.80</span>, analyzer)<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ <span class="agent">Resolves to 198.51.100.42</span> (<span class="conf-high">conf: 0.99</span>, harvester) → <span class="evidence">[DNS output]</span><br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└─ <span class="agent">ShadyRegistrar, Panama</span> (<span class="conf-high">conf: 0.95</span>, harvester) → <span class="evidence">[WHOIS record]</span><br>
+&nbsp;&nbsp;└─ <span class="agent">Threat actor TTP pattern</span> (<span class="conf-mid">conf: 0.70</span>, analyzer)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="agent">ShadyRegistrar, Panama</span> (shared reference)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="agent">nginx/1.18 + PHP/7.4</span> (<span class="conf-high">conf: 0.99</span>, harvester) → <span class="evidence">[HTTP headers]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="agent">Bulletproof hosting detected</span> (shared reference)
+</div>
+
+<p>All 6 signatures verified. Zero unsupported claims. Zero broken references. The entire reasoning chain is inspectable.</p>
+
+<h2>5. Operations</h2>
+
+<table>
+  <tr><th>Operation</th><th>Command</th><th>Purpose</th></tr>
+  <tr><td>Trace</td><td><code>lattice trace &lt;id&gt;</code></td><td>Walk backward from conclusion to evidence</td></tr>
+  <tr><td>Audit</td><td><code>lattice audit</code></td><td>Find unsupported claims, low confidence, broken refs</td></tr>
+  <tr><td>Verify</td><td><code>lattice verify</code></td><td>Check Ed25519 signatures on all claims</td></tr>
+  <tr><td>Stats</td><td><code>lattice stats</code></td><td>Summary metrics for the investigation</td></tr>
+  <tr><td>Export</td><td><code>lattice export</code></td><td>Serialize investigation as JSON</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2>6. Discussion</h2>
+
+<h3>6.1 What LATTICE Solves</h3>
+
+<p><strong>Backward traceability.</strong> Any conclusion can be traced to its supporting evidence. This is essential for client-facing security reports, journalistic fact-checking, and regulatory compliance.</p>
+
+<p><strong>Tamper evidence.</strong> Content-addressing and cryptographic signatures make it computationally infeasible to modify a claim without detection. This provides integrity assurance without requiring blockchain or distributed consensus.</p>
+
+<p><strong>Agent attribution.</strong> Each claim is tied to a specific agent identity. When a conclusion is wrong, it is possible to identify which agent introduced the error and at what step.</p>
+
+<h3>6.2 Limitations</h3>
+
+<p><strong>Confidence propagation.</strong> In v0.1, confidence values are metadata set by agents. They do not automatically propagate through the DAG. Bayesian belief propagation is mathematically well-defined, but the choice of priors and conditional dependencies is a research question. We plan to add pluggable propagation models in a future version, clearly marked as experimental.</p>
+
+<p><strong>Deterministic replay.</strong> LATTICE records what agents concluded, not the exact computational state. Because LLM outputs are non-deterministic, re-running the same agents with the same evidence will generally produce different results. What LATTICE can show is that removing a specific piece of evidence eliminates support for downstream claims (static graph analysis).</p>
+
+<p><strong>Trust in agents.</strong> LATTICE verifies that claims were signed by the agents that produced them and have not been modified. It does not verify that agents themselves are trustworthy or that their reasoning is sound. A compromised agent can sign false claims that will pass signature verification.</p>
+
+<h3>6.3 Connection to Broader Research</h3>
+
+<p><strong>Auditable hyper-investigation.</strong> Le Deuff's concept of hyper-investigation (2019) foregrounds the epistemic and civic dimensions of open-source inquiry. LATTICE provides technical infrastructure for a core requirement: that investigative conclusions be traceable, challengeable, and defensible.</p>
+
+<p><strong>EU AI Act compliance.</strong> The EU AI Act requires high-risk AI systems to provide explanations. A claim DAG with provenance and confidence metadata is a natural compliance format.</p>
+
+<p><strong>Structured Analytic Techniques as protocols.</strong> The Claim/Evidence/Confidence structure maps naturally to SATs like Analysis of Competing Hypotheses. A future extension could formalize SATs as inter-agent communication protocols.</p>
+
+<h2>7. Future Work</h2>
+
+<table>
+  <tr><th>Version</th><th>Feature</th><th>Description</th></tr>
+  <tr><td>v0.2</td><td>Framework adapters</td><td>Integration plugins for LangGraph, CrewAI, AutoGen</td></tr>
+  <tr><td>v0.3</td><td>Confidence propagation</td><td>Pluggable Bayesian propagation modules</td></tr>
+  <tr><td>v0.4</td><td>Web dashboard</td><td>Interactive DAG visualization</td></tr>
+  <tr><td>Research</td><td>SATs as protocols</td><td>ACH and Devil's Advocacy as agent communication schemas</td></tr>
+</table>
+
+<h2>8. Conclusion</h2>
+
+<p>Multi-agent AI systems in cybersecurity and intelligence need accountability infrastructure the same way software development needs version control. The ability to trace conclusions backward, verify integrity, and attribute decisions to specific agents is not a feature. It is a prerequisite for professional use.</p>
+
+<p>LATTICE provides this infrastructure in a minimal, framework-agnostic, offline-first Python library. It is available under an MIT license at <strong>github.com/alibhutto69/lattice</strong>.</p>
+
+<h2>References</h2>
+
+<div class="references">
+<p>Cresci, S. (2020). A decade of social bot detection. <em>Communications of the ACM</em>, 63(10), 72-83.</p>
+<p>Heuer, R. J., & Pherson, R. H. (2010). <em>Structured Analytic Techniques for Intelligence Analysis</em>. CQ Press.</p>
+<p>Le Deuff, O., & Perret, A. (2019). Hyperdocumentation: origin and evolution of a concept. <em>Journal of Documentation</em>, 75(6), 1463-1474.</p>
+<p>Le Deuff, O., & Roumanos, R. (2022). Enjeux definitionnels et scientifiques de la litteratie algorithmique. <em>Communication & langages</em>, 211, 133-150.</p>
+<p>Moreau, L., & Missier, P. (2013). PROV-DM: The PROV Data Model. W3C Recommendation.</p>
+<p>Pacheco, D., et al. (2021). Uncovering coordinated networks on social media. <em>Proceedings of the International AAAI Conference on Web and Social Media</em>.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>Appendix A: Technical Specifications</h2>
+
+<table class="spec-table">
+  <tr><th>Component</th><th>Implementation</th></tr>
+  <tr><td>Language</td><td>Python 3.8+</td></tr>
+  <tr><td>Storage</td><td>SQLite (WAL mode)</td></tr>
+  <tr><td>Hashing</td><td>SHA-256</td></tr>
+  <tr><td>Signatures</td><td>Ed25519 (cryptography library)</td></tr>
+  <tr><td>CLI</td><td>Click + Rich</td></tr>
+  <tr><td>External dependencies</td><td>3 packages</td></tr>
+  <tr><td>Lines of code</td><td>~1,850</td></tr>
+  <tr><td>Test coverage</td><td>41 tests, all passing</td></tr>
+  <tr><td>License</td><td>MIT</td></tr>
+  <tr><td>Repository</td><td>github.com/alibhutto69/lattice</td></tr>
+</table>
+
+</body>
+</html>

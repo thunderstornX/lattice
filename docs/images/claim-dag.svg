@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" font-family="Inter, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <filter id="sh2">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#475569"/></marker>
+  </defs>
+
+  <rect width="900" height="550" rx="12" fill="url(#bg2)"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" fill="#f1f5f9" font-size="20" font-weight="700">Claim DAG: OSINT Investigation Trace</text>
+  <text x="450" y="55" text-anchor="middle" fill="#94a3b8" font-size="12">Every node is content-addressed (SHA-256) and signed (Ed25519)</text>
+
+  <!-- Legend -->
+  <rect x="620" y="70" width="250" height="100" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="640" cy="92" r="6" fill="#ef4444"/>
+  <text x="655" y="96" fill="#94a3b8" font-size="11">Final Assessment (Reporter)</text>
+  <circle cx="640" cy="114" r="6" fill="#f59e0b"/>
+  <text x="655" y="118" fill="#94a3b8" font-size="11">Derived Analysis (Analyzer)</text>
+  <circle cx="640" cy="136" r="6" fill="#3b82f6"/>
+  <text x="655" y="140" fill="#94a3b8" font-size="11">Raw Finding (Harvester)</text>
+  <circle cx="640" cy="158" r="6" fill="#10b981"/>
+  <text x="655" y="162" fill="#94a3b8" font-size="11">Evidence (Raw Data)</text>
+
+  <!-- Level 0: Final Assessment -->
+  <rect x="300" y="90" width="280" height="55" rx="10" fill="#991b1b" stroke="#ef4444" stroke-width="2" filter="url(#sh2)"/>
+  <text x="440" y="113" text-anchor="middle" fill="#fecaca" font-size="11" font-weight="600">ASSESSMENT: Likely threat actor</text>
+  <text x="440" y="130" text-anchor="middle" fill="#fca5a5" font-size="10">conf: 0.75 | reporter | human:assessment</text>
+
+  <!-- Level 1: Analyzer claims -->
+  <rect x="80" y="200" width="300" height="55" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" filter="url(#sh2)"/>
+  <text x="230" y="223" text-anchor="middle" fill="#fef3c7" font-size="11" font-weight="600">Bulletproof hosting detected</text>
+  <text x="230" y="240" text-anchor="middle" fill="#fde68a" font-size="10">conf: 0.80 | analyzer | llm:correlation</text>
+
+  <rect x="520" y="200" width="300" height="55" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" filter="url(#sh2)"/>
+  <text x="670" y="223" text-anchor="middle" fill="#fef3c7" font-size="11" font-weight="600">Threat actor TTP pattern</text>
+  <text x="670" y="240" text-anchor="middle" fill="#fde68a" font-size="10">conf: 0.70 | analyzer | llm:analysis</text>
+
+  <!-- Level 2: Harvester claims -->
+  <rect x="30" y="320" width="240" height="55" rx="10" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2" filter="url(#sh2)"/>
+  <text x="150" y="343" text-anchor="middle" fill="#bfdbfe" font-size="11" font-weight="600">Resolves to 198.51.100.42</text>
+  <text x="150" y="360" text-anchor="middle" fill="#93c5fd" font-size="10">conf: 0.99 | harvester | tool:nslookup</text>
+
+  <rect x="330" y="320" width="240" height="55" rx="10" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2" filter="url(#sh2)"/>
+  <text x="450" y="343" text-anchor="middle" fill="#bfdbfe" font-size="11" font-weight="600">ShadyRegistrar, Panama</text>
+  <text x="450" y="360" text-anchor="middle" fill="#93c5fd" font-size="10">conf: 0.95 | harvester | tool:whois</text>
+
+  <rect x="630" y="320" width="240" height="55" rx="10" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2" filter="url(#sh2)"/>
+  <text x="750" y="343" text-anchor="middle" fill="#bfdbfe" font-size="11" font-weight="600">nginx/1.18 + PHP/7.4</text>
+  <text x="750" y="360" text-anchor="middle" fill="#93c5fd" font-size="10">conf: 0.99 | harvester | tool:curl</text>
+
+  <!-- Level 3: Evidence -->
+  <rect x="30" y="440" width="180" height="40" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="120" y="465" text-anchor="middle" fill="#a7f3d0" font-size="10">📄 DNS Output</text>
+
+  <rect x="360" y="440" width="180" height="40" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="450" y="465" text-anchor="middle" fill="#a7f3d0" font-size="10">📄 WHOIS Record</text>
+
+  <rect x="690" y="440" width="180" height="40" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="780" y="465" text-anchor="middle" fill="#a7f3d0" font-size="10">📄 HTTP Headers</text>
+
+  <!-- Edges: Assessment to Analyzer -->
+  <line x1="380" y1="145" x2="280" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="500" y1="145" x2="600" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Edges: Analyzer to Harvester -->
+  <line x1="180" y1="255" x2="150" y2="320" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="280" y1="255" x2="400" y2="320" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <line x1="600" y1="255" x2="480" y2="320" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="720" y1="255" x2="750" y2="320" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="670" y1="255" x2="280" y2="255" stroke="#475569" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- Edges: Harvester to Evidence -->
+  <line x1="150" y1="375" x2="120" y2="440" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="450" y1="375" x2="450" y2="440" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="750" y1="375" x2="780" y2="440" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Hash labels on key nodes -->
+  <text x="440" y="85" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">226797e5...</text>
+  <text x="150" y="315" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">45776dcf...</text>
+  <text x="450" y="315" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">96ca14da...</text>
+  <text x="750" y="315" text-anchor="middle" fill="#64748b" font-size="9" font-style="italic">07de6d5a...</text>
+
+  <!-- Bottom label -->
+  <text x="450" y="520" text-anchor="middle" fill="#475569" font-size="10">Every edge is a cryptographic reference. Remove any node and all downstream claims lose their support.</text>
+  <text x="450" y="537" text-anchor="middle" fill="#64748b" font-size="10">lattice trace 226797e5... walks this entire graph backward in one command.</text>
+</svg>

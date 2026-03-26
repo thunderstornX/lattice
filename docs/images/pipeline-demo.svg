@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Inter, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <marker id="a4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#60a5fa"/></marker>
+    <filter id="sh4"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
+  </defs>
+
+  <rect width="900" height="480" rx="12" fill="url(#bg4)"/>
+  <text x="450" y="35" text-anchor="middle" fill="#f1f5f9" font-size="20" font-weight="700">Three-Agent OSINT Pipeline</text>
+
+  <!-- Phase 1: Collection -->
+  <rect x="30" y="60" width="260" height="380" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="160" y="85" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="700">PHASE 1: COLLECTION</text>
+  <text x="160" y="102" text-anchor="middle" fill="#64748b" font-size="11">Harvester Agent</text>
+
+  <!-- Harvester tools -->
+  <rect x="50" y="115" width="220" height="45" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
+  <text x="60" y="135" fill="#60a5fa" font-size="11">🔍 nslookup</text>
+  <text x="60" y="150" fill="#94a3b8" font-size="10">→ 198.51.100.42 (conf: 0.99)</text>
+
+  <rect x="50" y="170" width="220" height="45" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
+  <text x="60" y="190" fill="#60a5fa" font-size="11">🔍 whois</text>
+  <text x="60" y="205" fill="#94a3b8" font-size="10">→ ShadyRegistrar, PA (conf: 0.95)</text>
+
+  <rect x="50" y="225" width="220" height="45" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
+  <text x="60" y="245" fill="#60a5fa" font-size="11">🔍 curl -I</text>
+  <text x="60" y="260" fill="#94a3b8" font-size="10">→ nginx + PHP + tracking (conf: 0.99)</text>
+
+  <!-- Evidence stored -->
+  <rect x="50" y="290" width="220" height="60" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="160" y="312" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">3 Evidence Blobs Stored</text>
+  <text x="160" y="328" text-anchor="middle" fill="#6ee7b7" font-size="10">Content-addressed (SHA-256)</text>
+  <text x="160" y="342" text-anchor="middle" fill="#6ee7b7" font-size="10">Immutable raw tool output</text>
+
+  <text x="160" y="380" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="600">3 Signed Claims</text>
+  <text x="160" y="396" text-anchor="middle" fill="#64748b" font-size="10">Each referencing its evidence blob</text>
+
+  <!-- Arrow Phase 1 → 2 -->
+  <path d="M290 240 L320 240" stroke="#60a5fa" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- Phase 2: Analysis -->
+  <rect x="320" y="60" width="260" height="380" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="450" y="85" text-anchor="middle" fill="#f59e0b" font-size="14" font-weight="700">PHASE 2: ANALYSIS</text>
+  <text x="450" y="102" text-anchor="middle" fill="#64748b" font-size="11">Analyzer Agent</text>
+
+  <rect x="340" y="120" width="220" height="70" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="1"/>
+  <text x="450" y="142" text-anchor="middle" fill="#fde68a" font-size="11" font-weight="600">Infrastructure Correlation</text>
+  <text x="450" y="160" text-anchor="middle" fill="#94a3b8" font-size="10">DNS + WHOIS → bulletproof hosting</text>
+  <text x="450" y="175" text-anchor="middle" fill="#fbbf24" font-size="10">conf: 0.80</text>
+
+  <rect x="340" y="210" width="220" height="70" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="1"/>
+  <text x="450" y="232" text-anchor="middle" fill="#fde68a" font-size="11" font-weight="600">TTP Pattern Matching</text>
+  <text x="450" y="250" text-anchor="middle" fill="#94a3b8" font-size="10">WHOIS + HTTP + Infra → threat actor</text>
+  <text x="450" y="265" text-anchor="middle" fill="#fbbf24" font-size="10">conf: 0.70</text>
+
+  <rect x="340" y="310" width="220" height="50" rx="6" fill="#334155" stroke="#475569" stroke-width="1"/>
+  <text x="450" y="335" text-anchor="middle" fill="#94a3b8" font-size="10">Each derived claim references</text>
+  <text x="450" y="350" text-anchor="middle" fill="#94a3b8" font-size="10">harvester claims by hash</text>
+
+  <text x="450" y="390" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="600">2 Signed Claims</text>
+  <text x="450" y="406" text-anchor="middle" fill="#64748b" font-size="10">DAG links back to Phase 1</text>
+
+  <!-- Arrow Phase 2 → 3 -->
+  <path d="M580 240 L610 240" stroke="#60a5fa" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- Phase 3: Report -->
+  <rect x="610" y="60" width="260" height="380" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="740" y="85" text-anchor="middle" fill="#ef4444" font-size="14" font-weight="700">PHASE 3: REPORT</text>
+  <text x="740" y="102" text-anchor="middle" fill="#64748b" font-size="11">Reporter Agent</text>
+
+  <rect x="630" y="120" width="220" height="90" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1"/>
+  <text x="740" y="145" text-anchor="middle" fill="#fecaca" font-size="11" font-weight="600">Final Assessment</text>
+  <text x="740" y="165" text-anchor="middle" fill="#94a3b8" font-size="10">Likely threat actor using</text>
+  <text x="740" y="180" text-anchor="middle" fill="#94a3b8" font-size="10">bulletproof infrastructure</text>
+  <text x="740" y="198" text-anchor="middle" fill="#f87171" font-size="10">conf: 0.75</text>
+
+  <!-- Verification results -->
+  <rect x="630" y="240" width="220" height="100" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="740" y="265" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600">Verification Results</text>
+  <text x="650" y="285" fill="#a7f3d0" font-size="10">✓ 6/6 signatures valid</text>
+  <text x="650" y="302" fill="#a7f3d0" font-size="10">✓ 0 unsupported claims</text>
+  <text x="650" y="319" fill="#a7f3d0" font-size="10">✓ 0 broken references</text>
+
+  <text x="740" y="370" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="600">1 Signed Claim</text>
+  <text x="740" y="386" text-anchor="middle" fill="#64748b" font-size="10">Full DAG: 6 claims, 3 evidence</text>
+  <text x="740" y="402" text-anchor="middle" fill="#64748b" font-size="10">100% auditable</text>
+
+  <!-- Bottom summary -->
+  <text x="450" y="465" text-anchor="middle" fill="#475569" font-size="11">Every conclusion traces back to raw tool output. Every signature verifiable. Every step inspectable.</text>
+</svg>
