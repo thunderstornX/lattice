@@ -24,6 +24,16 @@ from lattice.exceptions import (
     StoreError,
 )
 from lattice.models import Claim, Evidence
+from lattice.revocation import (
+    RevocationRecord,
+    RevocationResult,
+    ensure_schema as _ensure_revocation_schema,
+    get_claim_status as _get_claim_status,
+    is_compromised as _is_compromised,
+    is_revoked as _is_revoked,
+    list_revocations as _list_revocations,
+    revoke_claim as _revoke_claim,
+)
 
 LATTICE_DIR_NAME = ".lattice"
 DB_FILENAME = "lattice.db"
@@ -69,6 +79,7 @@ class LatticeStore:
         self._conn.execute("PRAGMA foreign_keys=ON")
         self._conn.executescript(_SCHEMA)
         self._conn.commit()
+        _ensure_revocation_schema(self._conn)
 
     # -- agents ------------------------------------------------------------
 
@@ -204,6 +215,35 @@ class LatticeStore:
     def agent_count(self) -> int:
         """Total registered agents."""
         return self._conn.execute("SELECT COUNT(*) FROM agents").fetchone()[0]
+
+    # -- revocation --------------------------------------------------------
+
+    def revoke_claim(
+        self,
+        target_claim_id: str,
+        agent_id: str,
+        reason: str = "",
+        *,
+        governance: bool = False,
+    ) -> RevocationResult:
+        """Revoke a claim and compute the downstream waterfall."""
+        return _revoke_claim(self._conn, target_claim_id, agent_id, reason, governance=governance)
+
+    def is_revoked(self, claim_id: str) -> bool:
+        """Check if a claim has been directly revoked."""
+        return _is_revoked(self._conn, claim_id)
+
+    def is_compromised(self, claim_id: str) -> bool:
+        """Check if a claim is compromised (directly or transitively)."""
+        return _is_compromised(self._conn, claim_id)
+
+    def get_claim_status(self, claim_id: str) -> str:
+        """Return 'VALID', 'REVOKED', or 'COMPROMISED'."""
+        return _get_claim_status(self._conn, claim_id)
+
+    def list_revocations(self) -> list[RevocationRecord]:
+        """List all revocation records."""
+        return _list_revocations(self._conn)
 
     # -- DAG convenience ---------------------------------------------------
 

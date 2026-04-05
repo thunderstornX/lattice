@@ -1,232 +1,91 @@
-# LATTICE — Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution
+# LATTICE v1.0 Enterprise Expansion - PRD
 
-## Product Requirements Document (v1.0)
+## Overview
+LATTICE provides a lightweight accountability layer for multi-agent AI systems. Every agent action produces a Claim: a content-addressed (SHA-256), cryptographically signed (Ed25519) assertion that references its supporting evidence through a local SQLite Directed Acyclic Graph (DAG). This expansion adds enterprise-grade features for local execution only, with zero budget for cloud resources.
 
-### Overview
+## Goals
+1. **Zero-Friction Middleware**: Provide a Python decorator (`@lattice_monitor`) that invisibly intercepts agent output, generates the SHA-256 hash, signs it with the agent's Ed25519 key, and writes the Claim to the LATTICE SQLite store. This enables integration with frameworks like LangGraph or CrewAI without rewriting agent logic.
+2. **Revocation Waterfall**: Implement a `revoke_claim(target_claim_id, agent_id)` method that uses recursive SQL CTEs to flag all downstream conclusions that relied on revoked evidence as STATUS: COMPROMISED, addressing the "Ephemeral Evidence" problem in OSINT.
+3. **Local Observability Dashboard**: Deliver a lightweight FastAPI server that reads the local LATTICE SQLite store and serves a clean, single-file HTML/JS/D3.js frontend. Clicking a node displays the Ed25519 signature, confidence score, and verification status, solving the "Glass" problem for compliance officers.
 
-LATTICE is a lightweight Python library that provides **accountability and provenance tracking for multi-agent AI systems**. It captures every agent decision as a content-addressed, cryptographically signed "Claim" that forms a Directed Acyclic Graph (DAG). This allows full backward traversal from any conclusion to raw evidence.
+## Non-Goals
+- No cloud dependencies or external services.
+- No web dashboard requiring internet access.
+- No framework adapters for LangGraph/CrewAI/AutoGen in v1 (decorator is framework-agnostic).
+- No Bayesian confidence propagation or network/P2P features.
+- No real-time streaming.
 
-It is **not** an agent framework. It's an accountability layer that sits underneath any agent framework (or raw Python functions).
+## Functional Requirements
+### 1. Zero-Friction Middleware
+- A decorator `@lattice_monitor(agent, method_desc=None)` that:
+  - Wraps any function (tool or LLM call) associated with a registered LATTICE agent.
+  - Automatically captures the return value as evidence.
+  - Creates a Claim with:
+    - `assertion`: function name + args (or provided method_desc)
+    - `evidence`: list containing the evidence ID of the return value
+    - `confidence`: default 1.0 for tool calls, configurable for LLM
+    - `method`: "tool:<function_name>" or "llm:<model_name>"
+    - `metadata`: function return value and any additional context
+  - Signs the claim with the agent's Ed25519 private key.
+  - Writes the claim to the LATTICE SQLite store.
+  - Returns the original function output unchanged.
 
-### Target Users
+### 2. Revocation Waterfall
+- A method `revoke_claim(target_claim_id, agent_id)` that:
+  - Verifies the `agent_id` matches the signer of `target_claim_id` (or has governance rights).
+  - Inserts a revocation record into a new `revocations` table.
+  - Uses a recursive CTE to traverse the DAG downstream from `target_claim_id` to find all claims that have a dependency path (direct or indirect) from the revoked claim.
+  - Marks these downstream claims as `STATUS: COMPROMISED` in query results (without altering the original claim).
+  - Returns the list of compromised claim IDs.
 
-- OSINT analysts who need auditable investigation trails
-- Security researchers building multi-agent tools
-- Anyone using LLM agents who needs to explain *why* the system concluded X
+### 3. Local Observability Dashboard
+- A FastAPI server serving:
+  - A single HTML page with embedded JS/D3.js (or Cytoscape.js) for DAG visualization.
+  - API endpoints to:
+    - Retrieve all claims, evidence, and agents.
+    - Retrieve the revocation status of any claim.
+    - Verify the Ed25519 signature of a claim.
+    - Trace a claim upstream to evidence.
+  - The frontend must:
+    - Display the DAG with nodes for claims and leaves for evidence.
+    - On node click, show a modal with: claim_id, assertion, agent_id, timestamp, confidence, method, metadata, signature, verification status, and revocation status.
+    - Use color-coding to distinguish normal, compromised, and revoked claims.
 
-### Core Concepts
+## Non-Functional Requirements
+- **Local Execution Only**: All code must run locally with no external network calls (except for optional LLM inference via provided NVIDIA API key, which is local to the machine).
+- **Technology Stack**: 
+  - Backend: Pure Python 3.11+ with standard libraries + `cryptography`, `fastapi`, `uvicorn`.
+  - Database: SQLite (WAL mode for concurrent reads).
+  - Frontend: HTML, vanilla JS, and D3.js (or Cytoscape.js) — no external CDN dependencies; all assets bundled.
+- **Cryptographic Integrity**: 
+  - Claims remain immutable and content-addressed.
+  - Revocation status is stored separately and does not alter the original claim or its signature.
+  - All signatures are Ed25519 and verifiable.
+- **Performance**: 
+  - Claim creation and signing must complete in <10ms for typical use.
+  - Revocation waterfall traversal must complete in <100ms for graphs up to 10k claims.
+  - Dashboard must load and render a 100-claim graph in <2s.
+- **Reliability**: 
+  - All public functions must be type-hinted and have docstrings.
+  - Comprehensive error handling with custom exceptions.
+  - Must handle edge cases: revoking a claim you didn't sign, revoking an already revoked claim, circular dependencies (though DAG should prevent this).
 
-#### Claim
+## Success Criteria
+A user should be able to:
+1. `pip install .` (or develop in place) and have a working LATTICE v1.0 enterprise package.
+2. Register agents and instrument 3 Python functions (tool or LLM calls) with `@lattice_monitor`.
+3. Run those functions to generate a claim DAG.
+4. Use `lattice revoke <claim_id>` (via CLI or API) to revoke a claim and see downstream claims flagged as compromised.
+5. Start the dashboard (`lattice dashboard`) and view the DAG locally in a browser, with clickable nodes showing full claim details and verification status.
+6. Run the test suite (`pytest`) and see all tests pass, including:
+   - Cryptographic signature verification.
+   - Revocation waterfall correctness (graph traversal).
+   - Middleware integration (tool and LLM functions).
+   - Dashboard API endpoints.
 
-The fundamental unit. Every agent action produces a Claim.
-
-```python
-@dataclass
-class Claim:
-    claim_id: str           # SHA-256 hash of (agent_id + assertion + evidence + method + timestamp)
-    agent_id: str           # Which agent made this claim
-    assertion: str          # What is being claimed (human-readable)
-    evidence: list[str]     # List of claim_ids or raw evidence hashes this depends on
-    confidence: float       # 0.0 to 1.0
-    method: str             # How it was derived: "tool:nslookup", "llm:gpt-4", "human:manual"
-    timestamp: float        # Unix timestamp
-    metadata: dict          # Arbitrary key-value pairs (tool output, raw data, etc.)
-    signature: str          # Ed25519 signature by the agent's private key
-```
-
-**Content-addressing:** `claim_id` is deterministic from the content. Same inputs = same hash. This makes claims immutable and verifiable.
-
-**Signatures:** Each agent has an Ed25519 keypair. Claims are signed so you can verify no tampering.
-
-#### Evidence Store
-
-Raw evidence (DNS records, WHOIS output, screenshots, API responses) is stored as content-addressed blobs. Claims reference these by hash.
-
-#### Claim DAG
-
-Claims reference other claims via the `evidence` field. This forms a DAG where:
-- **Leaf nodes** = raw evidence (tool outputs, API responses)
-- **Intermediate nodes** = derived claims (analysis, correlation)
-- **Root nodes** = final conclusions
-
-### Architecture
-
-```
-lattice/
-├── lattice/
-│   ├── __init__.py         # Public API: init(), claim(), track(), agent()
-│   ├── models.py           # Claim dataclass, Evidence dataclass
-│   ├── store.py            # SQLite-backed DAG store
-│   ├── evidence.py         # Content-addressed evidence blob store
-│   ├── agent.py            # Agent registry + Ed25519 key management
-│   ├── tracker.py          # @track decorator for auto-instrumentation
-│   ├── dag.py              # DAG traversal, trace, audit operations
-│   ├── cli.py              # CLI: lattice trace, audit, agents, export
-│   └── exceptions.py       # Custom exceptions
-├── examples/
-│   ├── basic_usage.py      # Minimal example
-│   └── osint_investigation.py  # Full OSINT demo with 3 agents
-├── tests/
-│   ├── test_models.py
-│   ├── test_store.py
-│   ├── test_dag.py
-│   ├── test_tracker.py
-│   └── test_cli.py
-├── pyproject.toml
-├── LICENSE                  # MIT
-└── README.md
-```
-
-### Public API
-
-#### Initialization
-
-```python
-import lattice
-
-# Initialize with a project directory (creates .lattice/ inside it)
-db = lattice.init("./my_investigation")
-
-# Or use in-memory for testing
-db = lattice.init(":memory:")
-```
-
-#### Agent Registration
-
-```python
-# Register an agent (generates Ed25519 keypair automatically)
-harvester = db.agent("harvester", role="collector", description="DNS and WHOIS lookups")
-analyzer = db.agent("analyzer", role="analyst", description="Correlates findings")
-```
-
-#### Making Claims
-
-```python
-# Store raw evidence
-evidence_id = db.evidence("nslookup example.com output...", content_type="text/plain")
-
-# Make a claim referencing evidence
-claim = harvester.claim(
-    assertion="example.com resolves to 93.184.216.34",
-    evidence=[evidence_id],
-    confidence=0.99,
-    method="tool:nslookup",
-    metadata={"ip": "93.184.216.34", "ttl": 3600}
-)
-
-# Make a derived claim referencing other claims
-conclusion = analyzer.claim(
-    assertion="example.com and example.org are hosted by the same entity",
-    evidence=[claim1.claim_id, claim2.claim_id, whois_claim.claim_id],
-    confidence=0.85,
-    method="llm:analysis",
-)
-```
-
-#### Decorator-Based Tracking
-
-```python
-@db.track(agent=harvester)
-def dns_lookup(domain: str) -> dict:
-    """Tracked function. Return value becomes claim metadata.
-    Docstring becomes the assertion template."""
-    result = subprocess.run(["nslookup", domain], capture_output=True, text=True)
-    return {"domain": domain, "output": result.stdout}
-```
-
-When `dns_lookup("example.com")` is called, LATTICE automatically:
-1. Captures the return value as evidence
-2. Creates a Claim with the function name + args as assertion
-3. Signs it with the agent's key
-4. Stores it in the DAG
-
-#### DAG Operations
-
-```python
-# Trace backward from a conclusion to all supporting evidence
-chain = db.trace(conclusion.claim_id)
-# Returns: list of Claims in dependency order (conclusion → intermediate → evidence)
-
-# Audit: find unsupported claims (claims with no evidence)
-unsupported = db.audit()
-
-# Find all claims by a specific agent
-harvester_claims = db.claims(agent_id="harvester")
-
-# Find all claims above/below a confidence threshold
-low_confidence = db.claims(max_confidence=0.5)
-
-# Export full investigation as JSON
-db.export_json("investigation.json")
-
-# Verify all signatures
-results = db.verify()
-# Returns: list of (claim_id, valid: bool) tuples
-```
-
-### CLI
-
-```bash
-# Initialize a new investigation
-lattice init ./my-investigation
-
-# List registered agents
-lattice agents
-
-# Show all claims (compact table)
-lattice claims
-
-# Trace a specific conclusion backward
-lattice trace <claim_id>
-
-# Audit for unsupported or low-confidence claims
-lattice audit
-
-# Verify all signatures
-lattice verify
-
-# Export to JSON
-lattice export investigation.json
-
-# Show DAG stats
-lattice stats
-```
-
-### Storage
-
-**SQLite** with three tables:
-- `agents` — id, role, description, public_key, created_at
-- `claims` — all Claim fields, indexed on claim_id, agent_id, timestamp
-- `evidence` — hash, content_type, data (blob), created_at
-- `claim_evidence` — many-to-many linking claims to their evidence references
-
-**Location:** `.lattice/lattice.db` inside the project directory.
-
-### Dependencies (minimal)
-
-**Required:**
-- Python 3.11+
-- `cryptography` (Ed25519 signatures)
-- `click` (CLI)
-- `rich` (CLI output formatting)
-
-**No other dependencies.** SQLite is stdlib. JSON is stdlib. hashlib is stdlib.
-
-### Non-Goals (v1)
-
-- No web dashboard (v2)
-- No framework adapters for LangGraph/CrewAI (v2)
-- No Bayesian confidence propagation (v2, research module)
-- No network/P2P features
-- No real-time streaming
-
-### Quality Requirements
-
-- 100% type-hinted
-- Every public function has a docstring
-- Tests for: claim creation, hashing determinism, signature verification, DAG traversal, audit detection, CLI commands
-- All exceptions are custom (no bare raises)
-
-### Success Criteria
-
-A user should be able to `pip install lattice-core`, instrument 3 Python functions with `@track`, run them, and then use `lattice trace` to walk backward from the final conclusion to raw evidence — all in under 10 minutes.
+## References
+- Original LATTICE PRD and architecture: see existing `docs/` and `lattice/` directory.
+- Cryptography: Ed25519 via `cryptography` library.
+- SQLite: Recursive CTE for graph traversal.
+- FastAPI: For local web server.
+- D3.js/Cytoscape.js: For DAG visualization.

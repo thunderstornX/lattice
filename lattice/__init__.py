@@ -13,34 +13,45 @@ Quick start::
     chain = store.trace(claim.claim_id)
 """
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 from lattice.agent import AgentHandle
 from lattice.dag import AuditIssue, VerifyResult, audit, stats, trace, verify_all
 from lattice.exceptions import (
     AgentAlreadyExistsError,
     AgentNotFoundError,
+    AlreadyRevokedError,
     ClaimNotFoundError,
     EvidenceNotFoundError,
     InvalidConfidenceError,
     LatticeError,
+    RevocationError,
     SignatureVerificationError,
     StoreError,
+    UnauthorizedRevocationError,
 )
 from lattice.models import Claim, Evidence
+from lattice.monitor import lattice_monitor
+from lattice.revocation import RevocationRecord, RevocationResult
 from lattice.store import LatticeStore, init_store
 from lattice.tracker import track
 
 __all__ = [
     "AgentHandle",
+    "AlreadyRevokedError",
     "AuditIssue",
     "Claim",
     "Evidence",
     "LatticeStore",
+    "RevocationError",
+    "RevocationRecord",
+    "RevocationResult",
+    "UnauthorizedRevocationError",
     "VerifyResult",
     "audit",
     "init",
     "init_store",
+    "lattice_monitor",
     "stats",
     "trace",
     "track",

@@ -43,3 +43,26 @@ class InvalidConfidenceError(LatticeError):
 
 class CyclicDependencyError(LatticeError):
     """Evidence references would create a cycle in the DAG."""
+
+
+class RevocationError(LatticeError):
+    """Revocation operation failed."""
+
+
+class UnauthorizedRevocationError(RevocationError):
+    """Agent is not authorized to revoke this claim."""
+
+    def __init__(self, agent_id: str, claim_id: str) -> None:
+        self.agent_id = agent_id
+        self.claim_id = claim_id
+        super().__init__(
+            f"Agent '{agent_id}' is not authorized to revoke claim '{claim_id[:12]}…'"
+        )
+
+
+class AlreadyRevokedError(RevocationError):
+    """Claim has already been revoked."""
+
+    def __init__(self, claim_id: str) -> None:
+        self.claim_id = claim_id
+        super().__init__(f"Claim '{claim_id[:12]}…' is already revoked")

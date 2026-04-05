@@ -31,7 +31,7 @@ def _short(full_id: str, n: int = 12) -> str:
 
 
 @click.group()
-@click.version_option(version="0.1.0", prog_name="lattice")
+@click.version_option(version="1.0.0", prog_name="lattice")
 def cli() -> None:
     """LATTICE — Accountability layer for multi-agent AI systems."""
 
@@ -173,6 +173,76 @@ def export(output: str, directory: str | None) -> None:
     with open(output, "w") as f:
         json.dump(data, f, indent=2)
     console.print(f"[green]✓[/green] Exported to [bold]{output}[/bold]")
+
+
+@cli.command()
+@click.argument("claim_id")
+@click.option("-d", "--directory", default=None)
+@click.option("--agent", required=True, help="Agent ID performing the revocation.")
+@click.option("--reason", default="", help="Reason for revocation.")
+@click.option("--governance", is_flag=True, help="Override signer check (governance mode).")
+def revoke(claim_id: str, directory: str | None, agent: str, reason: str, governance: bool) -> None:
+    """Revoke a claim and flag downstream dependents as COMPROMISED."""
+    store = _find_store(directory)
+    resolved = _resolve_id(store, claim_id)
+    try:
+        result = store.revoke_claim(resolved, agent, reason, governance=governance)
+    except Exception as exc:
+        console.print(f"[red]✗ {exc}[/red]")
+        store.close()
+        sys.exit(1)
+
+    console.print(f"\n[red]✗[/red] Revoked: [cyan]{_short(result.revoked_claim_id)}[/cyan]")
+    if result.compromised_claim_ids:
+        console.print(f"[yellow]⚠ {len(result.compromised_claim_ids)} downstream claims compromised:[/yellow]")
+        for cid in result.compromised_claim_ids:
+            console.print(f"  └─ [yellow]{_short(cid)}[/yellow]")
+    else:
+        console.print("[dim]No downstream claims affected.[/dim]")
+    console.print(f"\n[bold]Total affected: {result.total_affected}[/bold]")
+    store.close()
+
+
+@cli.command()
+@click.option("-d", "--directory", default=None)
+def revocations(directory: str | None) -> None:
+    """List all revocations."""
+    store = _find_store(directory)
+    revs = store.list_revocations()
+    store.close()
+    if not revs:
+        console.print("[dim]No revocations.[/dim]")
+        return
+    table = Table(title=f"Revocations ({len(revs)})")
+    table.add_column("Claim", style="cyan", max_width=12)
+    table.add_column("Revoked By", style="red")
+    table.add_column("Reason")
+    for r in revs:
+        table.add_row(_short(r.revoked_claim_id), r.revoked_by, r.reason or "—")
+    console.print(table)
+
+
+@cli.command(name="dashboard")
+@click.option("-d", "--directory", default=None)
+@click.option("--host", default="127.0.0.1", help="Bind address (default: 127.0.0.1).")
+@click.option("--port", default=8420, type=int, help="Port (default: 8420).")
+def dashboard_cmd(directory: str | None, host: str, port: int) -> None:
+    """Launch the local observability dashboard."""
+    import uvicorn
+
+    from lattice.dashboard import create_app
+    from lattice.store import DB_FILENAME, LATTICE_DIR_NAME
+
+    base = Path(directory) if directory else Path.cwd()
+    db_path = str(base / LATTICE_DIR_NAME / DB_FILENAME)
+    if not Path(db_path).exists():
+        console.print(f"[red]No LATTICE store at {db_path}[/red]\nRun: lattice init <dir>")
+        sys.exit(1)
+
+    console.print(f"[green]✓[/green] Dashboard at [bold]http://{host}:{port}[/bold]")
+    console.print("[dim]Press Ctrl+C to stop.[/dim]\n")
+    app = create_app(db_path)
+    uvicorn.run(app, host=host, port=port, log_level="warning")
 
 
 def _resolve_id(store: LatticeStore, partial: str) -> str:
