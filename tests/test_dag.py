@@ -72,6 +72,15 @@ class TestVerify:
     def test_empty(self, store: LatticeStore) -> None:
         assert verify_all(store) == []
 
+    def test_verify_after_key_rotation(self, store: LatticeStore) -> None:
+        agent = store.agent("bot")
+        agent.claim("before-rotate", method="m")
+        store.rotate_agent_key("bot")
+        new_agent = store.get_agent("bot")
+        new_agent.claim("after-rotate", method="m")
+        results = verify_all(store)
+        assert all(r.valid for r in results)
+
 
 class TestStats:
     def test_basic(self, store: LatticeStore) -> None:

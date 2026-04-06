@@ -117,8 +117,8 @@ def verify_all(store: LatticeStore) -> list[VerifyResult]:
             results.append(VerifyResult(claim.claim_id, claim.agent_id, False, "No signature"))
             continue
         try:
-            agent = store.get_agent(claim.agent_id)
-            valid = verify_signature(agent.public_key, claim.claim_id, claim.signature)
+            public_key = store.get_claim_signing_public_key(claim)
+            valid = verify_signature(public_key, claim.claim_id, claim.signature)
             results.append(VerifyResult(
                 claim.claim_id, claim.agent_id, valid,
                 "" if valid else "Signature mismatch",

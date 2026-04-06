@@ -43,3 +43,11 @@ class InvalidConfidenceError(LatticeError):
 
 class CyclicDependencyError(LatticeError):
     """Evidence references would create a cycle in the DAG."""
+
+
+class AgentKeyLockedError(LatticeError):
+    """Agent private key is encrypted and currently locked."""
+
+
+class AmbiguousClaimIdError(LatticeError):
+    """A partial claim ID resolved to multiple claims."""

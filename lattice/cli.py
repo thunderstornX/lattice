@@ -11,6 +11,8 @@ from rich.console import Console
 from rich.table import Table
 
 from lattice import dag
+from lattice import __version__ as lattice_version
+from lattice.exceptions import AmbiguousClaimIdError, ClaimNotFoundError
 from lattice.store import DB_FILENAME, LATTICE_DIR_NAME, LatticeStore, init_store
 
 console = Console()
@@ -31,7 +33,7 @@ def _short(full_id: str, n: int = 12) -> str:
 
 
 @click.group()
-@click.version_option(version="0.1.0", prog_name="lattice")
+@click.version_option(version=lattice_version, prog_name="lattice")
 def cli() -> None:
     """LATTICE — Accountability layer for multi-agent AI systems."""
 
@@ -177,11 +179,11 @@ def export(output: str, directory: str | None) -> None:
 
 def _resolve_id(store: LatticeStore, partial: str) -> str:
     """Resolve partial claim ID."""
-    all_claims = store.list_claims(limit=100_000)
-    matches = [c for c in all_claims if c.claim_id.startswith(partial)]
-    if len(matches) == 1:
-        return matches[0].claim_id
-    if len(matches) > 1:
-        console.print(f"[yellow]Ambiguous: '{partial}' matches {len(matches)} claims[/yellow]")
+    try:
+        return store.resolve_claim_id_prefix(partial)
+    except AmbiguousClaimIdError:
+        console.print(f"[yellow]Ambiguous: '{partial}' matches multiple claims[/yellow]")
         sys.exit(1)
-    return partial
+    except ClaimNotFoundError:
+        console.print(f"[red]Claim not found: '{partial}'[/red]")
+        sys.exit(1)

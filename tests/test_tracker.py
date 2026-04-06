@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from lattice.adapters import wrap_runnable
 from lattice.store import LatticeStore
 from lattice.tracker import track
 
@@ -47,3 +48,15 @@ class TestTrack:
         assert meta["function"] == "func"
         assert "elapsed_seconds" in meta
         assert meta["result"] == "done"
+
+    def test_wrap_runnable_adapter(self, store: LatticeStore) -> None:
+        agent = store.agent("bot")
+
+        def run(x: int) -> int:
+            return x + 1
+
+        wrapped = wrap_runnable("demo", run, agent=agent)
+        assert wrapped(10) == 11
+        claims = store.list_claims(agent_id="bot")
+        assert len(claims) == 1
+        assert claims[0].method == "adapter:demo"

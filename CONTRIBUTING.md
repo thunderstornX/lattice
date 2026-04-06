@@ -3,9 +3,9 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/alibhutto69/lattice.git
+git clone <private-repo-url>
 cd lattice
-pip install cryptography click rich pytest
+pip install -e . pytest
 PYTHONPATH=. pytest
 ```
 
@@ -49,7 +49,7 @@ Interactive DAG visualization. The main interaction is clicking a conclusion nod
 ## Pull Request Process
 
 1. Fork the repo
-2. Create a branch from `master`
+2. Create a branch from `main`
 3. Write tests for new functionality
 4. Make sure all tests pass
 5. Open a PR with a clear description of what changed and why

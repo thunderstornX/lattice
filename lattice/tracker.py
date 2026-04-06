@@ -53,6 +53,16 @@ def track(
     return decorator
 
 
+def track_callable(
+    agent: AgentHandle,
+    fn: Callable[..., Any],
+    method: str | None = None,
+    confidence: float = 1.0,
+) -> Callable[..., Any]:
+    """Adapter-friendly helper to track an existing callable without decorators."""
+    return track(agent=agent, method=method, confidence=confidence)(fn)
+
+
 def _build_assertion(fn: Callable[..., Any], args: tuple[Any, ...], kwargs: dict[str, Any]) -> str:
     """Build assertion from docstring template or function signature."""
     doc = fn.__doc__

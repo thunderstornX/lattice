@@ -77,7 +77,10 @@ class AgentHandle:
             evidence=evidence or [],
             confidence=confidence,
             method=method,
-            metadata=metadata,
+            metadata={
+                **(metadata or {}),
+                "signing_public_key": self.public_key.hex(),
+            },
         )
         signature = sign_claim_id(self._private_key, unsigned.claim_id)
         signed = Claim(

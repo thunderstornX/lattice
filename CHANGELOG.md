@@ -21,3 +21,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 2-page visual one-pager (PDF)
 - 4 architecture diagrams (SVG + PNG)
 - MIT License
+
+## [0.2.0] - 2026-04-06
+
+### Added
+- Schema version tracking via `schema_info` with migration to key lifecycle fields
+- Optional encrypted-at-rest agent private keys via `lattice.init(..., passphrase=...)`
+- Agent key lifecycle controls in store: rotation and revocation
+- Signature verification fallback to per-claim signing key metadata for rotated keys
+- Adapter helper module with `wrap_runnable(...)` for low-friction framework integration
+- Efficient claim ID prefix resolution in store for CLI trace operations
+
+### Changed
+- Unified local install/test flow to `pip install -e .` and `PYTHONPATH=. pytest tests/ -v`
+- Python support baseline aligned to 3.11+ in packaging and CI
+- CLI version now uses package `__version__`
+- Project positioning/documentation updated for private-first operation

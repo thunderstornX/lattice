@@ -44,3 +44,11 @@ class TestCLI:
             with open(out) as f:
                 data = json.load(f)
             assert "claims" in data
+
+    def test_trace_missing_id(self) -> None:
+        runner = CliRunner()
+        with tempfile.TemporaryDirectory() as tmp:
+            runner.invoke(cli, ["init", tmp])
+            result = runner.invoke(cli, ["trace", "deadbeef", "-d", tmp])
+            assert result.exit_code == 1
+            assert "Claim not found" in result.output

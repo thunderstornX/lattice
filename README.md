@@ -2,7 +2,7 @@
 
 **Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution**
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > Accountability layer for multi-agent AI systems. Every agent decision becomes a content-addressed, cryptographically signed claim in a DAG you can trace backward from any conclusion to raw evidence.
@@ -31,12 +31,12 @@ Every node is content-addressed (SHA-256), cryptographically signed (Ed25519), a
 ## Install
 
 ```bash
-git clone https://github.com/alibhutto69/lattice.git
+git clone <private-repo-url>
 cd lattice
-pip install cryptography click rich
+pip install -e .
 ```
 
-PyPI package (`pip install lattice-core`) coming soon.
+This repository is currently private-first and intended for internal use.
 
 ## Quick Start
 
@@ -44,7 +44,8 @@ PyPI package (`pip install lattice-core`) coming soon.
 import lattice
 
 # Initialize (use ":memory:" for testing, or a directory path)
-store = lattice.init(":memory:")
+# Optionally provide passphrase to encrypt agent private keys at rest.
+store = lattice.init(":memory:", passphrase="local-dev-passphrase")
 
 # Register agents
 harvester = store.agent("harvester", role="collector")
@@ -99,6 +100,15 @@ def dns_lookup(domain: str) -> dict:
 # 2. Captures args + return value as metadata
 # 3. Creates a signed Claim with "DNS lookup for example.com"
 # 4. Stores it in the DAG
+```
+
+Or wrap existing framework runnables/callables with near-zero code changes:
+
+```python
+from lattice import wrap_runnable
+
+tracked = wrap_runnable("langgraph-node", existing_callable, agent=harvester)
+result = tracked(input_payload)
 ```
 
 ## CLI
@@ -202,17 +212,15 @@ Minimal by design:
 
 LATTICE is designed for **single-user, local investigations**. Be aware of:
 
-- **Private keys are stored in plaintext** in the SQLite database. This is acceptable for local use where the `.lattice/` directory has appropriate file permissions. Do not share the database file with untrusted parties.
-- **No key rotation** in v0.1. If an agent keypair is compromised, register a new agent.
-- **The database is a local file** with no access control beyond filesystem permissions. Treat it like any other sensitive local file (similar to `.git/`).
-
-For multi-user or networked deployments, additional encryption and access control would be needed (planned for future versions).
+- **Optional encrypted-at-rest private keys**: pass a `passphrase` to `lattice.init(...)` to encrypt agent private keys in SQLite.
+- **Key lifecycle support**: agent keys can now be rotated/revoked.
+- **The database is a local file** with no access control beyond filesystem permissions. Treat it like any sensitive local file.
 
 ## Running Tests
 
 ```bash
-pip install -e ".[dev]"
-pytest
+pip install -e . pytest
+PYTHONPATH=. pytest tests/ -v
 ```
 
 ## Examples
