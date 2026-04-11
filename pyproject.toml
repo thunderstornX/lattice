@@ -34,6 +34,12 @@ dependencies = [
     "uvicorn[standard]>=0.24.0",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "httpx>=0.24.0",
+]
+
 [project.scripts]
 lattice = "lattice.cli:cli"
 
