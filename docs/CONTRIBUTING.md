@@ -5,11 +5,11 @@
 ```bash
 git clone https://github.com/thunderstornX/lattice.git
 cd lattice
-pip install cryptography click rich pytest
-PYTHONPATH=. pytest
+pip install -e ".[dev]"
+pytest
 ```
 
-All 41 tests should pass before you start.
+All 89 tests should pass before you start.
 
 ## Code Standards
 
@@ -18,33 +18,41 @@ All 41 tests should pass before you start.
 - Functions under 20 lines (split if longer)
 - Specific exceptions (never bare `except:`)
 - No magic numbers
+- Python 3.10+ required
 
 ## Running Tests
 
 ```bash
-PYTHONPATH=. pytest tests/ -v
+pytest tests/ -v
+```
+
+## Running Benchmarks
+
+```bash
+PYTHONPATH=. python3 benchmarks/run_benchmarks.py
 ```
 
 ## What We Need
 
-### Priority: Framework Adapters (v0.2)
+### Priority: Framework Adapters
 
-If you use LangGraph, CrewAI, or AutoGen, we need adapter plugins that hook into those frameworks' callback/event systems and automatically generate LATTICE claims. The ideal adapter requires zero changes to existing agent code.
+Adapter plugins that hook into LangGraph, CrewAI, or AutoGen callback/event systems and automatically generate LATTICE claims. The ideal adapter requires zero changes to existing agent code.
 
-### Priority: Confidence Propagation (v0.3)
+### Priority: Bayesian Confidence Propagation
 
-Pluggable modules for propagating confidence changes through the DAG. If a leaf claim's confidence drops, how should parent claims update? We want multiple strategies (simple decay, Bayesian, configurable) behind a clean interface.
+The current effective confidence uses min-propagation (worst-case correct under correlated sources). Pluggable modules for alternative propagation strategies (Bayesian, weighted combination) behind a clean interface would be valuable for different threat models.
 
-### Priority: Web Dashboard (v0.4)
+### Priority: Scalability
 
-Interactive DAG visualization. The main interaction is clicking a conclusion node and seeing its full evidence chain highlighted. Tech: probably a small FastAPI server serving a static frontend.
+Revocation waterfall and cycle detection show super-linear scaling past 1,000 claims. Pre-computed dependency indices or incremental transitive closure maintenance would help. See the paper (Section 6.3) for details.
 
 ### Always Welcome
 
 - Bug reports with reproducible examples
 - Documentation improvements
-- Performance work (especially for large DAGs with 10k+ claims)
+- Performance work (especially for large DAGs)
 - Test coverage improvements
+- Real-world case studies using LATTICE
 
 ## Pull Request Process
 

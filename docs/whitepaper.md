@@ -247,7 +247,7 @@ Pacheco, D., et al. (2021). Uncovering coordinated networks on social media. *Pr
 
 | Component | Implementation |
 |-----------|---------------|
-| Language | Python 3.8+ |
+| Language | Python 3.10+ |
 | Storage | SQLite (WAL mode) |
 | Hashing | SHA-256 |
 | Signatures | Ed25519 (via `cryptography` library) |
