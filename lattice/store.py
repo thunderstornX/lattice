@@ -282,6 +282,11 @@ class LatticeStore:
 
     # -- DAG convenience ---------------------------------------------------
 
+    def effective_confidence(self, claim_id: str) -> float:
+        """Compute the effective confidence of a claim (min across ancestors)."""
+        from lattice.dag import effective_confidence as _eff_conf
+        return _eff_conf(self, claim_id)
+
     def trace(self, claim_id: str) -> list[Claim]:
         """Trace backward from a claim to all dependencies."""
         from lattice.dag import trace as _trace

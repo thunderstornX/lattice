@@ -31,7 +31,7 @@ def _short(full_id: str, n: int = 12) -> str:
 
 
 @click.group()
-@click.version_option(version="1.1.0", prog_name="lattice")
+@click.version_option(version="1.2.0", prog_name="lattice")
 def cli() -> None:
     """LATTICE — Accountability layer for multi-agent AI systems."""
 
@@ -76,15 +76,20 @@ def claims(directory: str | None, agent: str | None, limit: int) -> None:
     if not rows:
         console.print("[dim]No claims.[/dim]")
         return
+    from lattice.dag import effective_confidence_bulk
+    eff = effective_confidence_bulk(store)
     table = Table(title=f"Claims ({len(rows)})")
     table.add_column("ID", style="cyan", max_width=12)
     table.add_column("Agent", style="green")
     table.add_column("Conf", justify="right")
+    table.add_column("Eff.", justify="right")
     table.add_column("Method", style="yellow")
-    table.add_column("Assertion", max_width=50)
+    table.add_column("Assertion", max_width=45)
     for c in rows:
         color = "green" if c.confidence >= 0.7 else "yellow" if c.confidence >= 0.3 else "red"
-        table.add_row(_short(c.claim_id), c.agent_id, f"[{color}]{c.confidence:.2f}[/{color}]", c.method, c.assertion[:50])
+        ec = eff.get(c.claim_id, c.confidence)
+        ec_color = "green" if ec >= 0.7 else "yellow" if ec >= 0.3 else "red"
+        table.add_row(_short(c.claim_id), c.agent_id, f"[{color}]{c.confidence:.2f}[/{color}]", f"[{ec_color}]{ec:.2f}[/{ec_color}]", c.method, c.assertion[:45])
     console.print(table)
 
 
@@ -97,12 +102,16 @@ def trace(claim_id: str, directory: str | None) -> None:
     resolved = _resolve_id(store, claim_id)
     chain = dag.trace(store, resolved)
     store.close()
+    from lattice.dag import effective_confidence_bulk
+    eff = effective_confidence_bulk(store)
     console.print(f"\n[bold]Trace: [cyan]{_short(resolved)}[/cyan][/bold]\n")
     for i, c in enumerate(chain):
         indent = "  " * i
         color = "green" if c.confidence >= 0.7 else "yellow" if c.confidence >= 0.3 else "red"
+        ec = eff.get(c.claim_id, c.confidence)
+        eff_note = f" eff:{ec:.2f}" if abs(ec - c.confidence) > 0.01 else ""
         prefix = "●" if i == 0 else "└─"
-        console.print(f"{indent}{prefix} [{color}]{c.confidence:.2f}[/{color}] [cyan]{_short(c.claim_id)}[/cyan] [dim]({c.agent_id}/{c.method})[/dim] {c.assertion[:70]}")
+        console.print(f"{indent}{prefix} [{color}]{c.confidence:.2f}{eff_note}[/{color}] [cyan]{_short(c.claim_id)}[/cyan] [dim]({c.agent_id}/{c.method})[/dim] {c.assertion[:65]}")
 
 
 @cli.command()
@@ -155,7 +164,8 @@ def stats(directory: str | None) -> None:
     console.print(f"  Claims:     [cyan]{s['total_claims']}[/cyan]")
     console.print(f"  Evidence:   [cyan]{s['total_evidence']}[/cyan]")
     if s['total_claims']:
-        console.print(f"  Confidence: [green]{s['avg_confidence']:.2f}[/green] avg ({s['min_confidence']:.2f}–{s['max_confidence']:.2f})")
+        console.print(f"  Confidence: [green]{s['avg_confidence']:.2f}[/green] avg ({s['min_confidence']:.2f}--{s['max_confidence']:.2f})")
+        console.print(f"  Effective:  [green]{s['avg_effective_confidence']:.2f}[/green] avg (min: {s['min_effective_confidence']:.2f})")
     if s.get("methods"):
         console.print("\n  [bold]Methods:[/bold]")
         for m, c in sorted(s["methods"].items(), key=lambda x: -x[1]):

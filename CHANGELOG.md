@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0] - 2026-04-11
+
+### Added
+- **Effective confidence** (min-propagation): `store.effective_confidence(claim_id)` and `effective_confidence_bulk(store)` compute the minimum confidence across the full ancestor chain, ensuring high-confidence conclusions cannot mask low-confidence evidence
+- **Inflated confidence audit**: `audit()` now flags claims where stated confidence exceeds effective confidence
+- Effective confidence shown in CLI (`lattice claims`, `lattice trace`, `lattice stats`)
+- Effective confidence returned in dashboard API (`/api/claims`, `/api/claims/{id}`)
+- Comprehensive benchmark suite (`benchmarks/run_benchmarks.py`) with 6 experiments: scalability, operations, revocation, effective confidence, baseline comparison, OSINT case study
+- Research paper updated with real benchmark data (Table 1), case study results
+
+### Changed
+- `audit()` returns a new issue type: `inflated_confidence`
+- `stats()` now includes `avg_effective_confidence` and `min_effective_confidence`
+- 89 tests (was 78)
+
 ## [1.1.0] - 2026-04-11
 
 ### Added

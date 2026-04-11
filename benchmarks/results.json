@@ -1,0 +1,201 @@
+{
+  "scalability": [
+    {
+      "dag_size": 10,
+      "mean_ms": 0.1873,
+      "std_ms": 0.0706
+    },
+    {
+      "dag_size": 50,
+      "mean_ms": 0.4345,
+      "std_ms": 0.082
+    },
+    {
+      "dag_size": 100,
+      "mean_ms": 0.7244,
+      "std_ms": 0.0918
+    },
+    {
+      "dag_size": 500,
+      "mean_ms": 3.4386,
+      "std_ms": 0.3343
+    },
+    {
+      "dag_size": 1000,
+      "mean_ms": 7.3297,
+      "std_ms": 4.1761
+    },
+    {
+      "dag_size": 2000,
+      "mean_ms": 12.3889,
+      "std_ms": 0.2811
+    }
+  ],
+  "operations": {
+    "evidence_storage": {
+      "mean_ms": 0.0091,
+      "std_ms": 0.0108
+    },
+    "claim_creation": {
+      "mean_ms": 0.6791,
+      "std_ms": 0.0255
+    },
+    "verify_all_100": {
+      "mean_ms": 43.3343,
+      "std_ms": 0.8545
+    },
+    "trace_100_chain": {
+      "mean_ms": 1.3594,
+      "std_ms": 0.0634
+    },
+    "audit_100": {
+      "mean_ms": 4.0047,
+      "std_ms": 1.1351
+    },
+    "eff_conf_single": {
+      "mean_ms": 1.3042,
+      "std_ms": 0.0327
+    },
+    "eff_conf_bulk_100": {
+      "mean_ms": 2.4352,
+      "std_ms": 1.2195
+    },
+    "stats_100": {
+      "mean_ms": 3.7392,
+      "std_ms": 2.3289
+    }
+  },
+  "revocation": [
+    {
+      "chain_length": 10,
+      "mean_ms": 0.3765,
+      "affected": 10
+    },
+    {
+      "chain_length": 50,
+      "mean_ms": 1.0226,
+      "affected": 50
+    },
+    {
+      "chain_length": 100,
+      "mean_ms": 3.4465,
+      "affected": 100
+    },
+    {
+      "chain_length": 500,
+      "mean_ms": 81.1988,
+      "affected": 500
+    },
+    {
+      "chain_length": 1000,
+      "mean_ms": 350.1097,
+      "affected": 1000
+    },
+    {
+      "chain_length": 2000,
+      "mean_ms": 1460.668,
+      "affected": 2000
+    }
+  ],
+  "effective_confidence_scaling": [
+    {
+      "dag_size": 10,
+      "single_mean_ms": 0.1468,
+      "single_std_ms": 0.0511,
+      "bulk_mean_ms": 0.1183,
+      "bulk_std_ms": 0.0651
+    },
+    {
+      "dag_size": 50,
+      "single_mean_ms": 0.725,
+      "single_std_ms": 0.1046,
+      "bulk_mean_ms": 0.4998,
+      "bulk_std_ms": 0.1987
+    },
+    {
+      "dag_size": 100,
+      "single_mean_ms": 1.4475,
+      "single_std_ms": 0.1248,
+      "bulk_mean_ms": 0.8839,
+      "bulk_std_ms": 0.127
+    },
+    {
+      "dag_size": 500,
+      "single_mean_ms": 7.5459,
+      "single_std_ms": 0.2299,
+      "bulk_mean_ms": 4.7757,
+      "bulk_std_ms": 1.0181
+    },
+    {
+      "dag_size": 1000,
+      "single_mean_ms": 15.8108,
+      "single_std_ms": 1.0104,
+      "bulk_mean_ms": 9.6341,
+      "bulk_std_ms": 2.2808
+    },
+    {
+      "dag_size": 2000,
+      "single_mean_ms": 30.2008,
+      "single_std_ms": 0.7901,
+      "bulk_mean_ms": 41.8514,
+      "bulk_std_ms": 28.0359
+    }
+  ],
+  "baseline_comparison": {
+    "bare_mean_ms": 0.000235,
+    "bare_std_ms": 8.8e-05,
+    "instrumented_mean_ms": 0.2423,
+    "instrumented_std_ms": 0.0597,
+    "overhead_ms": 0.242,
+    "overhead_pct": 102972.7,
+    "iterations": 1000
+  },
+  "case_study": {
+    "pipeline": {
+      "total_agents": 3,
+      "total_claims": 9,
+      "total_evidence": 5,
+      "dag_depth": 9,
+      "collection_time_ms": 0.807,
+      "analysis_time_ms": 0.4234,
+      "report_time_ms": 0.1774,
+      "total_pipeline_time_ms": 1.4095
+    },
+    "verification": {
+      "all_signatures_valid": true,
+      "audit_issues_total": 1,
+      "inflated_confidence_flags": 1
+    },
+    "confidence_analysis": {
+      "final_report_stated": 0.75,
+      "final_report_effective": 0.7,
+      "min_effective_in_dag": 0.7,
+      "avg_effective_in_dag": 0.8567,
+      "claims_with_inflation": 1
+    },
+    "stats": {
+      "total_agents": 3,
+      "total_claims": 9,
+      "total_evidence": 5,
+      "avg_confidence": 0.8622222222222222,
+      "min_confidence": 0.7,
+      "max_confidence": 0.99,
+      "avg_effective_confidence": 0.8566666666666667,
+      "min_effective_confidence": 0.7,
+      "methods": {
+        "tool:nslookup": 1,
+        "tool:whois": 1,
+        "tool:httpx": 1,
+        "tool:crt.sh": 1,
+        "tool:passivedns": 1,
+        "llm:analysis": 3,
+        "analyst:synthesis": 1
+      },
+      "claims_per_agent": {
+        "harvester": 5,
+        "analyzer": 3,
+        "reporter": 1
+      }
+    }
+  }
+}

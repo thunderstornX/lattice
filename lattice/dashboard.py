@@ -67,13 +67,16 @@ def create_app(db_path: str) -> FastAPI:
 
     @app.get("/api/claims")
     async def api_claims(limit: int = 10000) -> List[Dict[str, Any]]:
-        """List all claims with revocation status."""
+        """List all claims with revocation status and effective confidence."""
+        from lattice.dag import effective_confidence_bulk
         store = _store()
         claims = store.list_claims(limit=limit)
+        eff = effective_confidence_bulk(store)
         result = []
         for c in claims:
             d = c.to_dict()
             d["status"] = get_claim_status(store._conn, c.claim_id)
+            d["effective_confidence"] = eff.get(c.claim_id, c.confidence)
             result.append(d)
         store.close()
         return result
@@ -92,6 +95,7 @@ def create_app(db_path: str) -> FastAPI:
 
         d = claim.to_dict()
         d["status"] = get_claim_status(store._conn, claim.claim_id)
+        d["effective_confidence"] = store.effective_confidence(claim.claim_id)
 
         # Verify signature
         try:

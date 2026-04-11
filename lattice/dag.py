@@ -1,4 +1,4 @@
-"""DAG traversal, trace-back, audit, and verification."""
+"""DAG traversal, trace-back, audit, verification, and effective confidence."""
 
 from __future__ import annotations
 
@@ -41,6 +41,90 @@ def trace(store: LatticeStore, claim_id: str) -> list[Claim]:
     return result
 
 
+# ---------------------------------------------------------------------------
+# Effective confidence
+# ---------------------------------------------------------------------------
+
+
+def effective_confidence(store: LatticeStore, claim_id: str) -> float:
+    """Compute the effective confidence of a claim.
+
+    The effective confidence is the minimum confidence across the claim
+    itself and all of its ancestors in the DAG.  This ensures that a
+    high-confidence conclusion cannot mask low-confidence evidence
+    deeper in the chain.
+
+    Formally:
+        gamma*(c) = min(gamma(c), min_{c' in ancestors(c)} gamma(c'))
+
+    If a reference points to raw evidence (not a claim), it is treated
+    as having confidence 1.0 (raw data is maximally trustworthy as data;
+    its interpretation is a separate concern).
+
+    Returns:
+        The effective confidence as a float in [0.0, 1.0].
+
+    Raises:
+        ClaimNotFoundError: if claim_id does not exist.
+    """
+    root = store.get_claim(claim_id)
+    min_conf = root.confidence
+
+    visited: set[str] = set()
+    queue: deque[str] = deque()
+
+    # Seed with evidence refs
+    for ref in root.evidence:
+        queue.append(ref)
+
+    while queue:
+        cid = queue.popleft()
+        if cid in visited:
+            continue
+        visited.add(cid)
+        try:
+            claim = store.get_claim(cid)
+        except ClaimNotFoundError:
+            continue  # evidence leaf, confidence 1.0 by convention
+        if claim.confidence < min_conf:
+            min_conf = claim.confidence
+        for ref in claim.evidence:
+            if ref not in visited:
+                queue.append(ref)
+
+    return min_conf
+
+
+def effective_confidence_bulk(store: LatticeStore) -> dict[str, float]:
+    """Compute effective confidence for all claims in the store.
+
+    Returns a dict mapping claim_id to effective confidence.  Uses a
+    topological-order approach to avoid redundant traversals.
+    """
+    claims = store.list_claims(limit=100_000)
+    claim_map: dict[str, Claim] = {c.claim_id: c for c in claims}
+    cache: dict[str, float] = {}
+
+    def _eff(cid: str) -> float:
+        if cid in cache:
+            return cache[cid]
+        claim = claim_map.get(cid)
+        if claim is None:
+            return 1.0  # raw evidence
+        min_c = claim.confidence
+        for ref in claim.evidence:
+            ref_c = _eff(ref)
+            if ref_c < min_c:
+                min_c = ref_c
+        cache[cid] = min_c
+        return min_c
+
+    for c in claims:
+        _eff(c.claim_id)
+
+    return cache
+
+
 @dataclass
 class AuditIssue:
     """A single issue found during audit."""
@@ -51,10 +135,14 @@ class AuditIssue:
 
 
 def audit(store: LatticeStore, confidence_threshold: float = 0.3) -> list[AuditIssue]:
-    """Audit the DAG for unsupported claims, low confidence, and broken refs."""
+    """Audit the DAG for unsupported claims, low confidence, broken refs,
+    and inflated confidence."""
     issues: list[AuditIssue] = []
     claims = store.list_claims(limit=100_000)
     known_ids = {c.claim_id for c in claims}
+
+    # Compute effective confidence for all claims once
+    eff_conf = effective_confidence_bulk(store)
 
     for claim in claims:
         if not claim.evidence:
@@ -74,8 +162,18 @@ def audit(store: LatticeStore, confidence_threshold: float = 0.3) -> list[AuditI
                 except Exception:  # noqa: BLE001
                     issues.append(AuditIssue(
                         claim.claim_id, "broken_reference",
-                        f"Ref '{ref[:12]}…' not found",
+                        f"Ref '{ref[:12]}...' not found",
                     ))
+
+        # Inflated confidence: stated > effective by more than 0.01
+        eff = eff_conf.get(claim.claim_id, claim.confidence)
+        if claim.confidence - eff > 0.01 and claim.evidence:
+            issues.append(AuditIssue(
+                claim.claim_id, "inflated_confidence",
+                f"Stated {claim.confidence:.2f} but effective {eff:.2f} "
+                f"(ancestor floor): '{claim.assertion[:50]}'",
+            ))
+
     return issues
 
 
@@ -138,6 +236,10 @@ def stats(store: LatticeStore) -> dict[str, Any]:
         methods[c.method] = methods.get(c.method, 0) + 1
         per_agent[c.agent_id] = per_agent.get(c.agent_id, 0) + 1
 
+    # Effective confidence stats
+    eff = effective_confidence_bulk(store) if claims else {}
+    eff_vals = list(eff.values()) if eff else []
+
     return {
         "total_agents": store.agent_count(),
         "total_claims": len(claims),
@@ -145,6 +247,8 @@ def stats(store: LatticeStore) -> dict[str, Any]:
         "avg_confidence": sum(confs) / len(confs) if confs else 0.0,
         "min_confidence": min(confs) if confs else 0.0,
         "max_confidence": max(confs) if confs else 0.0,
+        "avg_effective_confidence": sum(eff_vals) / len(eff_vals) if eff_vals else 0.0,
+        "min_effective_confidence": min(eff_vals) if eff_vals else 0.0,
         "methods": methods,
         "claims_per_agent": per_agent,
     }

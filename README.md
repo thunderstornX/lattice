@@ -164,6 +164,20 @@ lattice export output.json -d ./my-investigation
 └──────────────────┘    └────────────────────┘
 ```
 
+## Effective Confidence
+
+LATTICE computes the *effective confidence* of every claim: the minimum confidence across the claim itself and all of its ancestors. A conclusion can't hide behind a high stated confidence if its evidence chain contains a weak link.
+
+```python
+# Stated confidence is 0.95, but an ancestor has 0.6
+chain_effective = store.effective_confidence(conclusion.claim_id)
+# Returns 0.6 — the real floor
+
+# Audit catches the mismatch
+issues = store.audit()
+# -> "inflated_confidence: Stated 0.95 but effective 0.60"
+```
+
 ## Core Concepts
 
 ### Claim

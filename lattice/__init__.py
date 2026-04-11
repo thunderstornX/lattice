@@ -13,10 +13,19 @@ Quick start::
     chain = store.trace(claim.claim_id)
 """
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 from lattice.agent import AgentHandle
-from lattice.dag import AuditIssue, VerifyResult, audit, stats, trace, verify_all
+from lattice.dag import (
+    AuditIssue,
+    VerifyResult,
+    audit,
+    effective_confidence,
+    effective_confidence_bulk,
+    stats,
+    trace,
+    verify_all,
+)
 from lattice.exceptions import (
     AgentAlreadyExistsError,
     AgentNotFoundError,
@@ -50,6 +59,8 @@ __all__ = [
     "UnauthorizedRevocationError",
     "VerifyResult",
     "audit",
+    "effective_confidence",
+    "effective_confidence_bulk",
     "init",
     "init_store",
     "lattice_monitor",
