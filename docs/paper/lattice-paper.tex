@@ -260,7 +260,7 @@ The \texttt{@lattice\_monitor} decorator uses \texttt{functools.wraps} to transp
 \section{Evaluation}
 \label{sec:evaluation}
 
-We evaluate LATTICE across six experiments on a Linux server (Intel Xeon, 2GB RAM, SSD, Python 3.8). All measurements use \texttt{time.perf\_counter()} with multiple repetitions.
+We evaluate LATTICE across six experiments on a Linux VPS (Intel Xeon E5-2676 v3 @ 2.40GHz, 2GB RAM, SSD, Ubuntu 20.04, Python 3.8). All measurements use \texttt{time.perf\_counter()} with multiple repetitions.
 
 \subsection{Experiment 1: Scalability}
 
@@ -334,7 +334,7 @@ We measure the cost of revoking the root claim in chains of increasing length (T
 \end{tabular}
 \end{table}
 
-Revocation scales super-linearly due to the recursive CTE traversal. For investigations under 500 claims, waterfall computation completes in under 100~ms. Larger DAGs may benefit from pre-computed dependency indices in future versions.
+Revocation scales super-linearly because the recursive CTE re-traverses shared subgraphs in diamond-shaped DAGs without memoization: each downstream claim is visited once per path that reaches it, not once per claim. For investigations under 500 claims, waterfall computation completes in under 100~ms. Larger DAGs would benefit from pre-computed dependency indices or incremental materialized views that maintain the transitive closure on each insertion.
 
 \subsection{Experiment 4: Effective Confidence Scaling}
 
@@ -429,7 +429,7 @@ We observe four connection points:
 
 \textbf{Single-user model.} LATTICE stores private keys in plaintext in SQLite. Multi-user deployments would require encryption at rest and proper key management.
 
-\textbf{Min-propagation is conservative.} Effective confidence uses the minimum across ancestors. More sophisticated approaches (Bayesian propagation, weighted combination) could model confidence degradation more precisely but would introduce assumptions about independence between evidence sources.
+\textbf{Min-propagation is conservative.} Effective confidence uses the minimum across ancestors. More sophisticated approaches (Bayesian propagation, weighted combination) could model confidence degradation more precisely but would require assumptions about independence between evidence sources. We note that min-propagation is actually \textit{correct} under worst-case correlation: if two evidence sources are fully correlated, the joint confidence is bounded by the minimum. In adversarial and security contexts where evidence sources may be manipulated by a common actor, this worst-case posture is a defensible design choice rather than merely a simplification.
 
 \textbf{LLM as black box.} LATTICE captures LLM inputs and outputs but cannot verify internal reasoning. This is a fundamental limitation shared by all monitoring approaches.
 
