@@ -223,7 +223,7 @@ Multi-agent AI systems in cybersecurity and intelligence need accountability inf
 
 LATTICE provides this infrastructure in a minimal, framework-agnostic, offline-first Python library. It is not a research prototype. It is a working tool, available under an MIT license, that can be integrated into existing investigative workflows today.
 
-The source code is available at https://github.com/alibhutto69/lattice.
+The source code is available at https://github.com/thunderstornX/lattice.
 
 ---
 

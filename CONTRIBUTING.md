@@ -3,7 +3,7 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/alibhutto69/lattice.git
+git clone https://github.com/thunderstornX/lattice.git
 cd lattice
 pip install cryptography click rich pytest
 PYTHONPATH=. pytest

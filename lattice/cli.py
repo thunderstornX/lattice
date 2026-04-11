@@ -31,7 +31,7 @@ def _short(full_id: str, n: int = 12) -> str:
 
 
 @click.group()
-@click.version_option(version="1.0.0", prog_name="lattice")
+@click.version_option(version="1.1.0", prog_name="lattice")
 def cli() -> None:
     """LATTICE — Accountability layer for multi-agent AI systems."""
 

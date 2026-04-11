@@ -13,7 +13,7 @@ Quick start::
     chain = store.trace(claim.claim_id)
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 from lattice.agent import AgentHandle
 from lattice.dag import AuditIssue, VerifyResult, audit, stats, trace, verify_all
@@ -22,6 +22,7 @@ from lattice.exceptions import (
     AgentNotFoundError,
     AlreadyRevokedError,
     ClaimNotFoundError,
+    CyclicDependencyError,
     EvidenceNotFoundError,
     InvalidConfidenceError,
     LatticeError,

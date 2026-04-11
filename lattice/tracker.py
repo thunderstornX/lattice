@@ -1,14 +1,21 @@
-"""Auto-instrumentation decorator for LATTICE."""
+"""Legacy auto-instrumentation decorator.
+
+``@track`` is a convenience alias for ``@lattice_monitor`` with
+``capture_evidence=False``.  New code should prefer ``@lattice_monitor``
+directly since it offers more control (evidence capture, custom evidence
+IDs, etc.).
+
+.. deprecated:: 1.1
+   Use :func:`lattice.monitor.lattice_monitor` instead.
+"""
 
 from __future__ import annotations
 
-import functools
-import inspect
-import json
-import time
+import warnings
 from typing import Any, Callable, TypeVar
 
 from lattice.agent import AgentHandle
+from lattice.monitor import lattice_monitor
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -20,8 +27,8 @@ def track(
 ) -> Callable[[F], F]:
     """Decorator that auto-creates a Claim from a function call.
 
-    The function's docstring becomes the assertion template.
-    Return value and args are captured as metadata.
+    This is a thin wrapper around :func:`lattice_monitor` with
+    ``capture_evidence=False``.  Prefer ``@lattice_monitor`` for new code.
 
     Example::
 
@@ -29,65 +36,18 @@ def track(
         def dns_lookup(domain: str) -> dict:
             \"\"\"DNS lookup for {domain}\"\"\"
             ...
+
+    .. deprecated:: 1.1
+       Use ``@lattice_monitor`` instead.
     """
-
-    def decorator(fn: F) -> F:
-        @functools.wraps(fn)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            start = time.time()
-            result = fn(*args, **kwargs)
-            elapsed = time.time() - start
-
-            assertion = _build_assertion(fn, args, kwargs)
-            meta = _build_metadata(fn, args, kwargs, result, elapsed)
-
-            agent.claim(
-                assertion=assertion,
-                confidence=confidence,
-                method=method or f"func:{fn.__name__}",
-                metadata=meta,
-            )
-            return result
-
-        return wrapper  # type: ignore[return-value]
-    return decorator
-
-
-def _build_assertion(fn: Callable[..., Any], args: tuple[Any, ...], kwargs: dict[str, Any]) -> str:
-    """Build assertion from docstring template or function signature."""
-    doc = fn.__doc__
-    if doc:
-        try:
-            sig = inspect.signature(fn)
-            bound = sig.bind(*args, **kwargs)
-            bound.apply_defaults()
-            return doc.strip().format(**bound.arguments)
-        except (KeyError, IndexError, TypeError):
-            return doc.strip()
-    arg_strs = [repr(a) for a in args] + [f"{k}={v!r}" for k, v in kwargs.items()]
-    return f"{fn.__name__}({', '.join(arg_strs)})"
-
-
-def _build_metadata(
-    fn: Callable[..., Any],
-    args: tuple[Any, ...],
-    kwargs: dict[str, Any],
-    result: Any,
-    elapsed: float,
-) -> dict[str, Any]:
-    """Capture function call details as JSON-safe metadata."""
-    meta: dict[str, Any] = {"function": fn.__name__, "elapsed_seconds": round(elapsed, 4)}
-    try:
-        meta["args"] = json.loads(json.dumps(args, default=str))
-    except (TypeError, ValueError):
-        meta["args"] = [str(a) for a in args]
-    if kwargs:
-        try:
-            meta["kwargs"] = json.loads(json.dumps(kwargs, default=str))
-        except (TypeError, ValueError):
-            meta["kwargs"] = {k: str(v) for k, v in kwargs.items()}
-    try:
-        meta["result"] = json.loads(json.dumps(result, default=str))
-    except (TypeError, ValueError):
-        meta["result"] = str(result)
-    return meta
+    warnings.warn(
+        "@track is deprecated; use @lattice_monitor instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return lattice_monitor(
+        agent,
+        method=method,
+        confidence=confidence,
+        capture_evidence=False,
+    )

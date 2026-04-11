@@ -20,6 +20,7 @@ from lattice.exceptions import (
     AgentAlreadyExistsError,
     AgentNotFoundError,
     ClaimNotFoundError,
+    CyclicDependencyError,
     EvidenceNotFoundError,
     StoreError,
 )
@@ -148,8 +149,42 @@ class LatticeStore:
 
     # -- claims ------------------------------------------------------------
 
+    def _check_no_cycle(self, claim: Claim) -> None:
+        """Verify that storing this claim would not create a cycle.
+
+        Walks the ancestor chain of each evidence reference.  If the new
+        claim's own ID appears anywhere upstream, that would form a cycle.
+        """
+        if not claim.evidence:
+            return
+        visited: set[str] = set()
+        queue = list(claim.evidence)
+        while queue:
+            ref = queue.pop()
+            if ref == claim.claim_id:
+                raise CyclicDependencyError(
+                    f"Adding claim '{claim.claim_id[:12]}...' would create "
+                    f"a cycle through evidence reference '{ref[:12]}...'"
+                )
+            if ref in visited:
+                continue
+            visited.add(ref)
+            row = self._conn.execute(
+                "SELECT evidence FROM claims WHERE claim_id=?", (ref,)
+            ).fetchone()
+            if row is not None:
+                for parent_ref in json.loads(row[0]):
+                    if parent_ref not in visited:
+                        queue.append(parent_ref)
+
     def put_claim(self, claim: Claim) -> None:
-        """Persist a claim."""
+        """Persist a claim.
+
+        Raises:
+            CyclicDependencyError: if the claim's evidence references would
+                create a cycle in the DAG.
+        """
+        self._check_no_cycle(claim)
         try:
             self._conn.execute(
                 "INSERT OR REPLACE INTO claims"

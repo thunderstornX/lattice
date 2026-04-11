@@ -2,7 +2,7 @@
 
 **Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution**
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > Accountability layer for multi-agent AI systems. Every agent decision becomes a content-addressed, cryptographically signed claim in a DAG you can trace backward from any conclusion to raw evidence.
@@ -31,7 +31,7 @@ Every node is content-addressed (SHA-256), cryptographically signed (Ed25519), a
 ## Install
 
 ```bash
-git clone https://github.com/alibhutto69/lattice.git
+git clone https://github.com/thunderstornX/lattice.git
 cd lattice
 pip install cryptography click rich
 ```
@@ -83,12 +83,12 @@ results = store.verify()
 
 ## Auto-Instrumentation
 
-Wrap any function with `@track` to auto-generate claims:
+Wrap any function with `@lattice_monitor` to auto-generate signed claims:
 
 ```python
-from lattice import track
+from lattice import lattice_monitor
 
-@track(agent=harvester, method="tool:nslookup")
+@lattice_monitor(harvester, method="tool:nslookup")
 def dns_lookup(domain: str) -> dict:
     """DNS lookup for {domain}"""
     result = subprocess.run(["nslookup", domain], capture_output=True, text=True)
@@ -96,10 +96,13 @@ def dns_lookup(domain: str) -> dict:
 
 # Calling dns_lookup("example.com") automatically:
 # 1. Runs the function
-# 2. Captures args + return value as metadata
+# 2. Stores the return value as raw Evidence
 # 3. Creates a signed Claim with "DNS lookup for example.com"
-# 4. Stores it in the DAG
+# 4. Links the claim to the evidence in the DAG
+# 5. Returns the original output unchanged
 ```
+
+Options: `confidence=0.9`, `evidence_ids=[...]` to link upstream claims, `capture_evidence=False` to skip evidence storage.
 
 ## CLI
 
@@ -192,7 +195,7 @@ Claims reference other claims and evidence, forming a Directed Acyclic Graph:
 
 Minimal by design:
 
-- **Python 3.11+**
+- **Python 3.10+**
 - **cryptography** — Ed25519 signatures
 - **click** — CLI
 - **rich** — Pretty terminal output
@@ -236,4 +239,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Author
 
-**Ali Murtaza Bhutto** — [@alibhutto69](https://github.com/alibhutto69)
+**Ali Murtaza Bhutto** — [@thunderstornX](https://github.com/thunderstornX)
