@@ -237,10 +237,18 @@ def revocations(directory: str | None) -> None:
 @click.option("--host", default="127.0.0.1", help="Bind address (default: 127.0.0.1).")
 @click.option("--port", default=8420, type=int, help="Port (default: 8420).")
 def dashboard_cmd(directory: str | None, host: str, port: int) -> None:
-    """Launch the local observability dashboard."""
-    import uvicorn
+    """Launch the local observability dashboard.
 
-    from lattice.dashboard import create_app
+    Requires the 'dashboard' extra: pip install lattice-core[dashboard]
+    """
+    try:
+        import uvicorn
+        from lattice.dashboard import create_app
+    except ImportError:
+        console.print("[red]Dashboard requires extra dependencies.[/red]")
+        console.print("Install with: [bold]pip install lattice-core\\[dashboard][/bold]")
+        sys.exit(1)
+
     from lattice.store import DB_FILENAME, LATTICE_DIR_NAME
 
     base = Path(directory) if directory else Path.cwd()

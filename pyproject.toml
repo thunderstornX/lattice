@@ -30,14 +30,18 @@ dependencies = [
     "cryptography>=41.0",
     "click>=8.0",
     "rich>=13.0",
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
 ]
 
 [project.optional-dependencies]
+dashboard = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+]
 dev = [
     "pytest>=7.0",
     "httpx>=0.24.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
 ]
 
 [project.scripts]

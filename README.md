@@ -53,7 +53,9 @@ Every node is content-addressed (SHA-256), cryptographically signed (Ed25519), a
 ```bash
 git clone https://github.com/thunderstornX/lattice.git
 cd lattice
-pip install -e .
+pip install -e .                    # Core library (no dashboard)
+pip install -e ".[dashboard]"       # With local web dashboard
+pip install -e ".[dev]"             # With dev/test dependencies
 ```
 
 ## Quick Start

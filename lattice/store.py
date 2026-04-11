@@ -154,6 +154,11 @@ class LatticeStore:
 
         Walks the ancestor chain of each evidence reference.  If the new
         claim's own ID appears anywhere upstream, that would form a cycle.
+
+        Note: this works because claim_id is deterministic (SHA-256 of
+        canonical content) and computed *before* insertion.  The claim's
+        ID is known before it exists in the store, so we can check
+        whether any ancestor already references it.
         """
         if not claim.evidence:
             return

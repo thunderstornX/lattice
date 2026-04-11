@@ -98,29 +98,54 @@ def effective_confidence(store: LatticeStore, claim_id: str) -> float:
 def effective_confidence_bulk(store: LatticeStore) -> dict[str, float]:
     """Compute effective confidence for all claims in the store.
 
-    Returns a dict mapping claim_id to effective confidence.  Uses a
-    topological-order approach to avoid redundant traversals.
+    Returns a dict mapping claim_id to effective confidence.  Uses an
+    iterative reverse-topological traversal (Kahn's algorithm) to avoid
+    Python's recursion limit on deep chains.
     """
     claims = store.list_claims(limit=100_000)
-    claim_map: dict[str, Claim] = {c.claim_id: c for c in claims}
-    cache: dict[str, float] = {}
+    if not claims:
+        return {}
 
-    def _eff(cid: str) -> float:
-        if cid in cache:
-            return cache[cid]
-        claim = claim_map.get(cid)
-        if claim is None:
-            return 1.0  # raw evidence
-        min_c = claim.confidence
-        for ref in claim.evidence:
-            ref_c = _eff(ref)
-            if ref_c < min_c:
-                min_c = ref_c
-        cache[cid] = min_c
-        return min_c
+    claim_map: dict[str, Claim] = {c.claim_id: c for c in claims}
+    claim_ids = set(claim_map.keys())
+
+    # Build reverse adjacency: for each claim, which claims depend on it?
+    # Also count how many *claim* dependencies each claim has (in-degree).
+    dependents: dict[str, list[str]] = {cid: [] for cid in claim_ids}
+    in_degree: dict[str, int] = {cid: 0 for cid in claim_ids}
 
     for c in claims:
-        _eff(c.claim_id)
+        for ref in c.evidence:
+            if ref in claim_ids:
+                dependents[ref].append(c.claim_id)
+                in_degree[c.claim_id] += 1
+
+    # Kahn's algorithm: start from leaves (claims with no claim-dependencies)
+    queue: deque[str] = deque()
+    for cid, deg in in_degree.items():
+        if deg == 0:
+            queue.append(cid)
+
+    cache: dict[str, float] = {}
+
+    while queue:
+        cid = queue.popleft()
+        claim = claim_map[cid]
+        # Effective confidence = min of own confidence and all evidence refs
+        min_c = claim.confidence
+        for ref in claim.evidence:
+            if ref in cache:
+                if cache[ref] < min_c:
+                    min_c = cache[ref]
+            elif ref not in claim_ids:
+                pass  # raw evidence leaf, confidence 1.0
+        cache[cid] = min_c
+
+        # Decrement in-degree for dependents, enqueue if ready
+        for dep in dependents[cid]:
+            in_degree[dep] -= 1
+            if in_degree[dep] == 0:
+                queue.append(dep)
 
     return cache
 

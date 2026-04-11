@@ -40,10 +40,14 @@ def track(
     .. deprecated:: 1.1
        Use ``@lattice_monitor`` instead.
     """
+    # stacklevel=3 so the warning points to the call site of @track,
+    # not the internals of track() itself.  When the decorator is applied
+    # at module level (@track on a def), stacklevel=3 correctly points
+    # to the module where the decorator is used.
     warnings.warn(
         "@track is deprecated; use @lattice_monitor instead.",
         DeprecationWarning,
-        stacklevel=2,
+        stacklevel=3,
     )
     return lattice_monitor(
         agent,
