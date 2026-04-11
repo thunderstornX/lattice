@@ -6,6 +6,7 @@
 [![Tests](https://github.com/thunderstornX/lattice/actions/workflows/tests.yml/badge.svg)](https://github.com/thunderstornX/lattice/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.2.0-orange.svg)](CHANGELOG.md)
+[![PyPI](https://img.shields.io/pypi/v/lattice-core.svg)](https://pypi.org/project/lattice-core/)
 
 > Accountability layer for multi-agent AI systems. Every agent decision becomes a content-addressed, cryptographically signed claim in a DAG you can trace backward from any conclusion to raw evidence.
 
