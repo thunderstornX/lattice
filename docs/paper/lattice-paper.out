@@ -1,0 +1,29 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Provenance and Lineage}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Content-Addressed Storage}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Structured Analytic Techniques}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Runtime Verification}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Blockchain and Distributed Ledgers}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Design}{}% 8
+\BOOKMARK [2][-]{subsection.3.1}{Design Principles}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Core Data Model}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.3}{The Claim DAG}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.4}{Revocation Model}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Architecture}{}% 13
+\BOOKMARK [1][-]{section.5}{Implementation}{}% 14
+\BOOKMARK [2][-]{subsection.5.1}{Content Addressing}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.2}{Cryptographic Signatures}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.3}{Revocation Waterfall}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.4}{Cycle Detection}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.5}{Runtime Monitoring}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.6}{Audit}{section.5}% 20
+\BOOKMARK [1][-]{section.6}{Evaluation}{}% 21
+\BOOKMARK [2][-]{subsection.6.1}{Correctness}{section.6}% 22
+\BOOKMARK [2][-]{subsection.6.2}{Performance}{section.6}% 23
+\BOOKMARK [2][-]{subsection.6.3}{Dependencies}{section.6}% 24
+\BOOKMARK [1][-]{section.7}{Discussion}{}% 25
+\BOOKMARK [2][-]{subsection.7.1}{Relationship to Formal Verification}{section.7}% 26
+\BOOKMARK [2][-]{subsection.7.2}{Limitations}{section.7}% 27
+\BOOKMARK [2][-]{subsection.7.3}{Applications}{section.7}% 28
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 29

@@ -7,6 +7,8 @@
 
 > Accountability layer for multi-agent AI systems. Every agent decision becomes a content-addressed, cryptographically signed claim in a DAG you can trace backward from any conclusion to raw evidence.
 
+**📄 [Read the Paper (PDF)](docs/pdf/LATTICE_Paper.pdf)** -- Full technical description, architecture, evaluation, and relationship to formal verification.
+
 **LATTICE is not an agent framework.** It's the accountability layer that sits *underneath* any agent framework — or raw Python functions.
 
 ## The Problem
