@@ -6,3 +6,6 @@ build/
 .pytest_cache/
 .lattice/
 *.db
+docs/paper/*.aux
+docs/paper/*.log
+docs/paper/*.out
