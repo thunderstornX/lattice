@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 16mm 18mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5px; line-height: 1.55; color: #1a1a1a; padding: 0; }
+  .header { text-align: center; border-bottom: 2.5px solid #1b365d; padding-bottom: 10px; margin-bottom: 12px; }
+  .header h1 { font-size: 17px; color: #1b365d; margin-bottom: 3px; font-weight: 700; }
+  .header .name { font-size: 13px; color: #333; font-weight: 600; margin-bottom: 2px; }
+  .header .contact { font-size: 9px; color: #555; }
+  .header .contact a { color: #1b365d; text-decoration: none; }
+  h2 { font-size: 11.5px; color: #1b365d; border-bottom: 1px solid #c8d0db; padding-bottom: 2px; margin: 11px 0 5px 0; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; }
+  .cols { display: flex; gap: 18px; }
+  .col { flex: 1; }
+  .col-wide { flex: 1.15; }
+  ul { padding-left: 13px; margin: 3px 0; }
+  li { margin-bottom: 2px; }
+  p { margin: 3px 0; text-align: justify; }
+  .framework-box { background: #f2f5fa; border: 1px solid #d4dbe8; border-radius: 4px; padding: 8px 10px; margin: 6px 0; }
+  .framework-box .title { font-weight: 700; color: #1b365d; font-size: 11px; margin-bottom: 3px; }
+  .stat-row { display: flex; gap: 8px; margin: 5px 0; }
+  .stat-item { flex: 1; background: #edf1f7; border-radius: 3px; padding: 5px 6px; text-align: center; }
+  .stat-item .num { font-size: 13px; font-weight: 700; color: #1b365d; }
+  .stat-item .lbl { font-size: 8px; color: #666; text-transform: uppercase; }
+  .alignment { background: #f8f5ee; border-left: 3px solid #b8960c; padding: 7px 10px; margin: 6px 0; border-radius: 0 4px 4px 0; font-size: 10px; }
+  .footer { text-align: center; border-top: 1.5px solid #1b365d; padding-top: 7px; margin-top: 12px; font-size: 8.5px; color: #777; }
+  .footer a { color: #1b365d; text-decoration: none; }
+  .section-note { font-size: 9.5px; color: #555; font-style: italic; margin: 2px 0 4px 0; }
+  strong { color: #1a1a1a; }
+</style>
+</head><body>
+
+<div class="header">
+  <h1>Portfolio: Deployable Multi-Agent Intelligence Systems</h1>
+  <div class="name">Ali Murtaza Bhutto</div>
+  <div class="contact">
+    <a href="mailto:alimurtazabhutto@proton.me">alimurtazabhutto@proton.me</a> ·
+    ORCID: <a href="https://orcid.org/0009-0007-2787-943X">0009-0007-2787-943X</a> ·
+    GitHub: <a href="https://github.com/thunderstornX">thunderstornX</a>
+  </div>
+</div>
+
+<div class="cols">
+<div class="col">
+
+<h2>About</h2>
+<p>OSINT data engineer and security researcher specializing in <strong>autonomous data acquisition pipelines</strong> and <strong>multi-agent AI architectures</strong>. I build production systems where AI agents must make verifiable, accountable decisions at scale — then deploy them in adversarial environments where trust cannot be assumed.</p>
+
+<div class="framework-box">
+  <div class="title">LATTICE — Open-Source Accountability Protocol</div>
+  <p style="font-size:10px;">A framework-agnostic Python library providing content-addressed (SHA-256), cryptographically signed (Ed25519) accountability for multi-agent AI systems. Every agent decision is recorded as a Claim in a directed acyclic graph, enabling backward traceability from conclusions to raw evidence.</p>
+  <div class="stat-row">
+    <div class="stat-item"><div class="num">89</div><div class="lbl">Automated Tests</div></div>
+    <div class="stat-item"><div class="num">0.65ms</div><div class="lbl">Claim Creation</div></div>
+    <div class="stat-item"><div class="num">10K+</div><div class="lbl">DAG Scalability</div></div>
+    <div class="stat-item"><div class="num">MIT</div><div class="lbl">Open Source</div></div>
+  </div>
+  <p style="font-size:9px;color:#555;margin-top:4px;">
+    Key features: effective confidence propagation (min-path semantics), revocation waterfall cascades, real-time dashboard (FastAPI + D3.js), zero-friction runtime monitoring.<br>
+    Paper &amp; code: <a href="https://github.com/thunderstornX/lattice" style="color:#1b365d;">github.com/thunderstornX/lattice</a>
+  </p>
+</div>
+
+<h2>Academic Background</h2>
+<ul>
+  <li><strong>M.S. Cybersecurity</strong> — GPA 3.39/4.0 (completed January 2026)</li>
+  <li>Coursework in applied cryptography, network security, digital forensics, and secure systems architecture</li>
+  <li>Research interest: accountability and provenance infrastructure for autonomous multi-agent systems in adversarial environments</li>
+</ul>
+
+</div>
+<div class="col-wide">
+
+<h2>Industrial Experience</h2>
+<ul>
+  <li><strong>OSINT Data Engineer — AlphaSearch</strong><br>
+    <span style="font-size:9.5px;color:#444;">Designed and operated large-scale autonomous data acquisition pipelines. Built infrastructure for continuous open-source intelligence collection across heterogeneous data sources with automated quality assurance and provenance tracking.</span></li>
+  <li style="margin-top:4px;"><strong>Security Analyst — CybeRisk</strong><br>
+    <span style="font-size:9.5px;color:#444;">Vulnerability assessment, threat intelligence analysis, and security operations in production environments.</span></li>
+  <li style="margin-top:4px;"><strong>Red Team — Cosmic Dolphins</strong><br>
+    <span style="font-size:9.5px;color:#444;">Adversarial simulation and penetration testing. Experience with offensive security methodologies and attack surface analysis.</span></li>
+</ul>
+
+<h2>Alignment with Prof. Siwik's Research</h2>
+<div class="alignment">
+  <p style="margin-bottom:4px;"><strong>Multi-agent autonomy under constraints.</strong> LATTICE directly addresses the challenge of trusted autonomous decision-making in environments where human oversight is limited or delayed — a core requirement for space-exploration systems and mission-critical autonomous architectures.</p>
+  <p style="margin-bottom:4px;"><strong>Cyber-resilient, secure-by-design systems.</strong> LATTICE's cryptographic integrity layer (content addressing + Ed25519 signatures) and revocation waterfall mechanism provide tamper evidence and compromise propagation tracking — capabilities essential for dual-use and mission-critical systems.</p>
+  <p style="margin-bottom:4px;"><strong>Swarm and distributed autonomy.</strong> The framework-agnostic accountability protocol generalizes to any multi-agent topology, including swarm architectures where individual agents must make independent decisions while maintaining collective verifiability.</p>
+  <p><strong>Onboard reasoning under constraints.</strong> LATTICE's offline-first, zero-dependency architecture (SQLite + minimal Python) is designed for constrained deployment environments — directly applicable to onboard reasoning systems with limited bandwidth and computational resources.</p>
+</div>
+
+<h2>Doctoral Research Direction</h2>
+<p>I aim to extend LATTICE into a formal accountability and verification framework for autonomous multi-agent systems operating in mission-critical, bandwidth-constrained environments — bridging the gap between practical deployability and formal guarantees for AI-driven space and security systems.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  Prepared for Dr hab. inż. Leszek Siwik · Faculty of Space Technologies · AGH University of Krakow · April 2026<br>
+  <a href="https://github.com/thunderstornX/lattice">github.com/thunderstornX/lattice</a> · <a href="mailto:alimurtazabhutto@proton.me">alimurtazabhutto@proton.me</a>
+</div>
+
+</body></html>

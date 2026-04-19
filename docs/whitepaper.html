@@ -1,477 +1,244 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>LATTICE: A Content-Addressed Accountability Protocol for Multi-Agent Intelligence Systems</title>
+<html><head><meta charset="utf-8">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
-  :root {
-    --bg: #ffffff;
-    --text: #1a1a2e;
-    --muted: #64748b;
-    --accent: #2563eb;
-    --border: #e2e8f0;
-    --code-bg: #f8fafc;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    color: #1a1a2e;
-    background: #ffffff;
-    line-height: 1.7;
-    font-size: 11pt;
-    max-width: 210mm;
-    margin: 0 auto;
-    padding: 20mm 25mm;
-  }
-
-  h1 {
-    font-size: 22pt;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 8px;
-    color: #1a1a2e;
-  }
-
-  h2 {
-    font-size: 15pt;
-    font-weight: 700;
-    margin-top: 28px;
-    margin-bottom: 10px;
-    color: #1a1a2e;
-    border-bottom: 2px solid #2563eb;
-    padding-bottom: 4px;
-  }
-
-  h3 {
-    font-size: 12pt;
-    font-weight: 600;
-    margin-top: 18px;
-    margin-bottom: 8px;
-    color: #334155;
-  }
-
-  p { margin-bottom: 10px; }
-
-  .author-block {
-    margin: 16px 0 24px;
-    padding: 16px 20px;
-    background: #f1f5f9;
-    border-radius: 8px;
-    border-left: 4px solid #2563eb;
-  }
-
-  .author-block .name {
-    font-size: 13pt;
-    font-weight: 600;
-  }
-
-  .author-block .details {
-    color: #64748b;
-    font-size: 10pt;
-    margin-top: 4px;
-  }
-
-  .abstract {
-    padding: 16px 20px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    margin: 20px 0;
-  }
-
-  .abstract h3 {
-    color: #2563eb;
-    margin-top: 0;
-  }
-
-  .keywords {
-    font-size: 10pt;
-    color: #64748b;
-    margin-top: 8px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 12px 0;
-    font-size: 10pt;
-  }
-
-  th {
-    background: #f1f5f9;
-    text-align: left;
-    padding: 8px 12px;
-    font-weight: 600;
-    border-bottom: 2px solid #e2e8f0;
-  }
-
-  td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-
-  code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9pt;
-    background: #f8fafc;
-    padding: 1px 5px;
-    border-radius: 3px;
-    border: 1px solid #e2e8f0;
-  }
-
-  pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9pt;
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 14px 18px;
-    border-radius: 8px;
-    margin: 12px 0;
-    
-    line-height: 1.5;
-  }
-
-  pre code {
-    background: none;
-    border: none;
-    padding: 0;
-    color: inherit;
-  }
-
-  .diagram {
-    margin: 20px 0;
-    text-align: center;
-  }
-
-  .diagram img {
-    max-width: 100%;
-    border-radius: 8px;
-  }
-
-  .diagram .caption {
-    font-size: 9pt;
-    color: #64748b;
-    margin-top: 6px;
-    font-style: italic;
-  }
-
-  .trace-box {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9pt;
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 14px 18px;
-    border-radius: 8px;
-    margin: 12px 0;
-    line-height: 1.6;
-  }
-
-  .trace-box .conf-high { color: #4ade80; }
-  .trace-box .conf-mid { color: #fbbf24; }
-  .trace-box .agent { color: #60a5fa; }
-  .trace-box .evidence { color: #34d399; }
-
-  .footnote {
-    font-size: 9pt;
-    color: #64748b;
-  }
-
-  .references {
-    font-size: 10pt;
-  }
-
-  .references p {
-    margin-bottom: 6px;
-    padding-left: 20px;
-    text-indent: -20px;
-  }
-
-  .page-break { page-break-before: always; }
-
-  .spec-table td:first-child {
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .gap-table th:nth-child(1) { width: 25%; }
-  .gap-table th:nth-child(2) { width: 25%; }
-  .gap-table th:nth-child(3) { width: 50%; }
-</style>
-</head>
-<body>
-
-<h1>LATTICE: A Content-Addressed Accountability Protocol for Multi-Agent Intelligence Systems</h1>
-
-<div class="author-block">
-  <div class="name">Ali Murtaza Bhutto</div>
-  <div class="details">
-    ORCID: 0009-0007-2787-943X<br>
-    MS Cybersecurity, SZABIST University | OSINT Engineer, AlphaSearch Inc.<br>
-    March 2026
-  </div>
-</div>
-
-<div class="abstract">
-  <h3>Abstract</h3>
-  <p>Multi-agent AI systems increasingly drive investigative workflows in cybersecurity, OSINT, and threat intelligence. These systems produce conclusions but cannot explain how they reached them. When an automated pipeline flags a domain as malicious or attributes a campaign to a threat actor, there is no standardized mechanism to trace that conclusion backward through the chain of evidence, verify that no step was fabricated, or assess how sensitive the result is to the removal of any single data point.</p>
-  <p>This paper introduces LATTICE (Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution), an open-source Python library that addresses this gap. LATTICE provides a lightweight accountability layer that sits beneath any agent framework. Every agent action produces a Claim: a content-addressed, cryptographically signed assertion that references its supporting evidence through a Directed Acyclic Graph. The result is a complete, tamper-evident reasoning chain from final conclusions down to raw tool output.</p>
-  <p>We describe the architecture, demonstrate its application in a multi-agent OSINT investigation, and argue that accountability infrastructure is a prerequisite for trustworthy multi-agent systems in security-critical domains.</p>
-  <div class="keywords"><strong>Keywords:</strong> multi-agent systems, provenance, OSINT, accountability, content-addressing, digital forensics, explainable AI</div>
-</div>
-
+  body { font-family: "Times New Roman", serif; font-size: 11px; line-height: 1.5; max-width: 700px; margin: 0 auto; padding: 40px 30px; color: #222; }
+  h1 { font-size: 18px; text-align: center; margin-bottom: 4px; }
+  h2 { font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 20px; }
+  h3 { font-size: 12px; margin-top: 14px; }
+  hr { border: none; border-top: 1px solid #999; margin: 16px 0; }
+  p { text-align: justify; }
+</style></head><body><h1>LATTICE: A Content-Addressed Accountability Protocol for Multi-Agent Intelligence Systems</h1>
+<p style="margin:4px 0;"><strong>Ali Murtaza Bhutto</strong></p>
+<p style="margin:4px 0;">ORCID: 0009-0007-2787-943X</p>
+<p style="margin:4px 0;">Version 1.2.1 — April 2026</p>
+<hr>
+<h2>Abstract</h2>
+<p style="margin:4px 0;">Multi-agent AI systems increasingly drive investigative workflows in cybersecurity, OSINT, and threat intelligence. These systems produce conclusions, but cannot explain how they reached them. When an automated pipeline flags a domain as malicious or attributes a campaign to a threat actor, there is no standardized mechanism to trace that conclusion backward through the chain of evidence, verify that no step was fabricated, or assess how sensitive the result is to the removal of any single data point.</p>
+<p style="margin:4px 0;">This paper introduces LATTICE (Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution), an open-source Python library that addresses this gap. LATTICE provides a lightweight accountability layer that sits beneath any agent framework. Every agent action produces a Claim: a content-addressed, cryptographically signed assertion that references its supporting evidence through a Directed Acyclic Graph. The result is a complete, tamper-evident reasoning chain from final conclusions down to raw tool output.</p>
+<p style="margin:4px 0;">Since its initial release, LATTICE has matured to v1.2.1 with effective confidence propagation via min-path semantics, revocation waterfall cascades, a real-time dashboard (FastAPI + D3.js), and a comprehensive benchmark suite. The library passes 89 automated tests and demonstrates sub-millisecond claim creation with DAG traversal scaling as O(n^{1.03}) through 10,000-node graphs.</p>
+<p style="margin:4px 0;">We describe the architecture, present empirical benchmarks, demonstrate its application in an OSINT investigation pipeline, and argue that accountability infrastructure is a prerequisite for trustworthy multi-agent systems in security-critical domains.</p>
+<p style="margin:4px 0;"><strong>Keywords:</strong> multi-agent systems, provenance, OSINT, accountability, content-addressing, digital forensics, effective confidence, revocation</p>
+<hr>
 <h2>1. Introduction</h2>
-
-<p>The adoption of multi-agent AI architectures in cybersecurity and intelligence work has accelerated rapidly. Frameworks like LangGraph, CrewAI, and AutoGen allow practitioners to decompose complex investigative tasks across specialized agents: one for data collection, another for analysis, a third for report synthesis. The appeal is clear. Complex investigations involve heterogeneous data sources, require multiple analytical perspectives, and benefit from parallelized execution.</p>
-
-<p>But these frameworks share a fundamental limitation. They are built around <em>orchestration</em> (how agents communicate) rather than <em>accountability</em> (why agents concluded what they did). The output of a multi-agent pipeline is typically a final report or a structured summary. The intermediate reasoning, the evidence that was considered and discarded, the confidence levels at each step, and the identity of the agent responsible for each assertion are lost or buried in unstructured logs.</p>
-
-<p>This matters for three concrete reasons:</p>
-
-<p><strong>Professional credibility.</strong> In security consulting, handing a client a report that says "our AI found this vulnerability" without an auditable reasoning chain is professionally inadequate. The client needs to understand the basis for each finding, assess its reliability, and make informed decisions about remediation.</p>
-
-<p><strong>Investigative integrity.</strong> In OSINT and investigative journalism, an unverifiable claim is worse than no claim at all, because it carries the false authority of a technical system. Organizations like Bellingcat, Mediapart, and the EU DisinfoLab have established rigorous standards for source attribution and methodology transparency. Automated pipelines that cannot meet these standards are not useful to them.</p>
-
-<p><strong>Regulatory compliance.</strong> The EU AI Act (Regulation 2024/1689) requires that high-risk AI systems provide explanations of their outputs. A claim DAG with full provenance and confidence metadata is a natural format for meeting this requirement.</p>
-
-<p>LATTICE addresses this by treating accountability as a system-level property rather than an afterthought.</p>
-
+<p style="margin:4px 0;">The adoption of multi-agent AI architectures in cybersecurity and intelligence work has accelerated rapidly. Frameworks like LangGraph, CrewAI, and AutoGen allow practitioners to decompose complex investigative tasks across specialized agents: one for data collection, another for analysis, a third for report synthesis. The appeal is clear. Complex investigations involve heterogeneous data sources, require multiple analytical perspectives, and benefit from parallelized execution.</p>
+<p style="margin:4px 0;">But these frameworks share a fundamental limitation. They are built around orchestration (how agents communicate) rather than accountability (why agents concluded what they did). The output of a multi-agent pipeline is typically a final report or a structured summary. The intermediate reasoning, the evidence that was considered and discarded, the confidence levels at each step, and the identity of the agent responsible for each assertion are lost or buried in unstructured logs.</p>
+<p style="margin:4px 0;">This matters. In security consulting, handing a client a report that says "our AI found this vulnerability" without an auditable reasoning chain is professionally inadequate. In OSINT and investigative journalism, an unverifiable claim is worse than no claim at all, because it carries the false authority of a technical system. In regulated industries governed by the EU AI Act or similar legislation, explainability is not optional.</p>
+<p style="margin:4px 0;">LATTICE addresses this by treating accountability as a system-level property rather than an afterthought. The core idea is simple: every agent decision is recorded as a content-addressed, signed Claim in a DAG. You can walk backward from any conclusion to the raw evidence that supports it, verify that nothing was tampered with, and identify exactly which agent made each assertion and how confident it was.</p>
+<p style="margin:4px 0;">The contribution is not algorithmic novelty. Content-addressing has existed since Merkle trees in the 1970s. Ed25519 signatures are standard. SQLite is ubiquitous. What appears to be new is the application of these primitives as a coherent accountability protocol specifically designed for multi-agent AI reasoning chains. To our knowledge, no existing tool combines content-addressing, cryptographic signatures, confidence tracking, and agent attribution in a single open protocol for AI systems.</p>
+<hr>
 <h2>2. Related Work</h2>
-
 <h3>2.1 Agent Observability Platforms</h3>
-<p>LangSmith (LangChain), LangFuse, Arize Phoenix, and Weights & Biases Prompts provide monitoring and tracing for LLM-based applications. These platforms focus on operational observability: latency, token counts, error rates, prompt/response pairs. They answer "what happened?" but not "why should we believe this conclusion?" More critically, they are cloud-hosted proprietary services. In security consulting and intelligence work, sending client data and investigation artifacts to third-party APIs is often prohibited by contract, regulation, or basic operational security.</p>
-
+<p style="margin:4px 0;">LangSmith (LangChain), LangFuse, Arize Phoenix, and Weights & Biases Prompts provide monitoring and tracing for LLM-based applications. These platforms focus on operational observability: latency, token counts, error rates, prompt/response pairs. They answer "what happened?" but not "why should we believe this conclusion?"</p>
+<p style="margin:4px 0;">More critically, they are cloud-hosted proprietary services. In security consulting and intelligence work, sending client data and investigation artifacts to third-party APIs is often prohibited by contract, regulation, or basic operational security.</p>
 <h3>2.2 Data Provenance Standards</h3>
-<p>The W3C PROV specification (Moreau & Missier, 2013) provides a general data model for provenance. PROV defines entities, activities, and agents, along with relationships like "wasGeneratedBy" and "wasDerivedFrom." The model is mature and well-specified, but it was designed for data lineage in scientific workflows, not for reasoning chains in adversarial contexts. It does not natively handle confidence distributions, cryptographic verification, or the specific needs of multi-agent AI pipelines.</p>
-
+<p style="margin:4px 0;">The W3C PROV specification (Moreau & Missier, 2013) provides a general data model for provenance. PROV defines entities, activities, and agents, along with relationships like "wasGeneratedBy" and "wasDerivedFrom." The model is mature and well-specified, but it was designed for data lineage in scientific workflows, not for reasoning chains in adversarial contexts. It does not natively handle confidence distributions, cryptographic verification, or the specific needs of multi-agent AI pipelines.</p>
 <h3>2.3 Structured Analytic Techniques</h3>
-<p>The intelligence community has developed Structured Analytic Techniques (SATs) such as Analysis of Competing Hypotheses (ACH), Devil's Advocacy, and Red Team/Blue Team analysis (Heuer & Pherson, 2010). These techniques formalize aspects of reasoning relevant to any multi-agent system: maintaining competing hypotheses, challenging assumptions, documenting alternative explanations. However, these techniques exist as human-oriented methodologies, not as machine-enforceable protocols.</p>
-
-<h3>2.4 The Gap</h3>
-
-<table class="gap-table">
-  <tr><th>Property</th><th>Existing Tools</th><th>LATTICE</th></tr>
-  <tr><td>Content-addressed immutability</td><td>Git (for code, not reasoning)</td><td>Every claim hashed by content</td></tr>
-  <tr><td>Cryptographic agent attribution</td><td>None in agent frameworks</td><td>Ed25519 signature per claim</td></tr>
-  <tr><td>Confidence as first-class primitive</td><td>None standardized</td><td>Float [0.0, 1.0] on every claim</td></tr>
-  <tr><td>DAG-structured reasoning chains</td><td>LangSmith traces (flat, proprietary)</td><td>Full backward-traversable DAG</td></tr>
-  <tr><td>Offline / local-first</td><td>Most require cloud</td><td>Pure SQLite, zero network</td></tr>
-</table>
-
-<div class="page-break"></div>
-
+<p style="margin:4px 0;">The intelligence community has developed Structured Analytic Techniques (SATs) such as Analysis of Competing Hypotheses (ACH), Devil's Advocacy, and Red Team/Blue Team analysis (Heuer & Pherson, 2010). These techniques formalize aspects of reasoning that are relevant to any multi-agent system: maintaining competing hypotheses, challenging assumptions, documenting alternative explanations. However, these techniques exist as human-oriented methodologies, not as machine-enforceable protocols.</p>
+<h3>2.4 Content-Addressed Storage</h3>
+<p style="margin:4px 0;">Git, IPFS, and Merkle DAGs more broadly demonstrate that content-addressing is a viable foundation for tamper-evident, distributed data structures. Git's object model (blobs, trees, commits identified by SHA-1 hashes) provides an existence proof that content-addressed DAGs can scale to millions of objects while remaining verifiable. LATTICE applies this principle to reasoning chains rather than source code.</p>
+<h3>2.5 The Gap</h3>
+<p style="margin:4px 0;">To our knowledge, no existing system combines all four properties that accountability in multi-agent AI requires:</p>
+<p style="margin:4px 0;">1. <strong>Content-addressed immutability.</strong> Claims and evidence are identified by their content hash, making them tamper-evident.</p>
+<p style="margin:4px 0;">2. <strong>Cryptographic agent attribution.</strong> Each claim is signed by the agent that produced it, using a verifiable keypair.</p>
+<p style="margin:4px 0;">3. <strong>Confidence as a first-class primitive.</strong> Every assertion carries a calibrated confidence value, not a binary true/false label.</p>
+<p style="margin:4px 0;">4. <strong>DAG-structured reasoning chains.</strong> Claims reference their supporting evidence, forming a traversable graph from conclusions to raw data.</p>
+<p style="margin:4px 0;">LATTICE fills this gap.</p>
+<hr>
 <h2>3. Architecture</h2>
-
 <h3>3.1 Design Principles</h3>
-
-<p><strong>Minimality.</strong> LATTICE depends only on Python's standard library plus three packages (<code>cryptography</code>, <code>click</code>, <code>rich</code>). Storage is SQLite. There is no external service, no cloud dependency, no daemon to manage.</p>
-
-<p><strong>Framework agnosticism.</strong> LATTICE is not an agent framework. It does not orchestrate agents, manage conversations, or handle tool calls. It records what agents did and why. This means it can sit underneath LangGraph, CrewAI, AutoGen, or raw Python scripts without requiring changes to the agent logic itself.</p>
-
-<p><strong>Verifiability by default.</strong> Every Claim is content-addressed (SHA-256) and signed (Ed25519) at creation time. There is no "opt-in" to accountability; it is the default behavior.</p>
-
-<p><strong>Offline-first.</strong> The entire system runs locally. Investigation data, agent keys, and the reasoning DAG never leave the machine unless the user explicitly exports them.</p>
-
-<h3>3.2 System Overview</h3>
-
-<div class="diagram">
-  <img src="images/architecture-overview.svg" alt="LATTICE Architecture Overview">
-  <div class="caption">Figure 1: LATTICE architecture. The accountability layer sits between your agents and the output surface.</div>
-</div>
-
-<h3>3.3 Core Primitives</h3>
-
-<p><strong>Evidence</strong> is a content-addressed blob of raw data: tool output, API responses, DNS records, WHOIS results, or any other artifact. Evidence is identified by the SHA-256 hash of its content. Storing the same data twice is idempotent.</p>
-
-<p><strong>Claim</strong> is the fundamental unit of the DAG. A Claim represents an assertion made by a specific agent, supported by specific evidence:</p>
-
-<table class="spec-table">
-  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-  <tr><td><code>claim_id</code></td><td>string</td><td>SHA-256 hash of canonical JSON of all content fields</td></tr>
-  <tr><td><code>agent_id</code></td><td>string</td><td>Identifier of the originating agent</td></tr>
-  <tr><td><code>assertion</code></td><td>string</td><td>Human-readable statement of what is claimed</td></tr>
-  <tr><td><code>evidence</code></td><td>list[string]</td><td>Claim IDs or Evidence IDs this depends on</td></tr>
-  <tr><td><code>confidence</code></td><td>float</td><td>Value in [0.0, 1.0]</td></tr>
-  <tr><td><code>method</code></td><td>string</td><td>Derivation method (e.g., <code>tool:nslookup</code>, <code>llm:analysis</code>)</td></tr>
-  <tr><td><code>timestamp</code></td><td>float</td><td>Unix timestamp of creation</td></tr>
-  <tr><td><code>metadata</code></td><td>dict</td><td>Arbitrary key-value pairs</td></tr>
-  <tr><td><code>signature</code></td><td>string</td><td>Hex-encoded Ed25519 signature over <code>claim_id</code></td></tr>
-</table>
-
-<p>The <code>claim_id</code> is computed deterministically from the content fields using canonical JSON serialization (sorted keys, no whitespace). Same inputs always produce the same ID. Any modification produces a different hash, making tampering detectable.</p>
-
-<p><strong>Agent</strong> is a registered entity with an Ed25519 keypair. When a claim is created, the private key signs the <code>claim_id</code>. Any party with the public key can verify that the claim was produced by that specific agent and has not been modified.</p>
-
-<h3>3.4 How a Claim Gets Created</h3>
-
-<div class="diagram">
-  <img src="images/data-flow.svg" alt="Claim Creation Flow">
-  <div class="caption">Figure 2: Every claim passes through hash, sign, store. There is no shortcut that skips accountability.</div>
-</div>
-
-<h3>3.5 The Claim DAG</h3>
-
-<p>Claims reference other claims and evidence through the <code>evidence</code> field, forming a Directed Acyclic Graph. Leaf nodes are raw evidence blobs. Intermediate nodes are derived claims. Root nodes are final conclusions. Walking backward from any root traverses the complete reasoning chain.</p>
-
-<div class="diagram">
-  <img src="images/claim-dag.svg" alt="Claim DAG Example">
-  <div class="caption">Figure 3: A complete investigation DAG. Every node is content-addressed and signed. Every edge is a cryptographic reference.</div>
-</div>
-
-<div class="page-break"></div>
-
-<h2>4. Demonstration: OSINT Investigation Pipeline</h2>
-
-<p>To illustrate LATTICE in practice, we instrument a three-agent OSINT investigation targeting a suspicious domain.</p>
-
-<div class="diagram">
-  <img src="images/pipeline-demo.svg" alt="Three-Agent Pipeline">
-  <div class="caption">Figure 4: Three-phase investigation pipeline. Each phase produces signed claims that reference the previous phase.</div>
-</div>
-
-<h3>4.1 Agent Configuration</h3>
-
-<table>
-  <tr><th>Agent</th><th>Role</th><th>Methods</th></tr>
-  <tr><td>Harvester</td><td>Collector</td><td>DNS lookup, WHOIS query, HTTP header inspection</td></tr>
-  <tr><td>Analyzer</td><td>Analyst</td><td>Infrastructure correlation, TTP pattern matching</td></tr>
-  <tr><td>Reporter</td><td>Reporter</td><td>Risk assessment synthesis</td></tr>
-</table>
-
-<h3>4.2 Implementation</h3>
-
-<pre><code>import lattice
-
-store = lattice.init(":memory:")
-harvester = store.agent("harvester", role="collector")
-analyzer  = store.agent("analyzer",  role="analyst")
-reporter  = store.agent("reporter",  role="reporter")
-
-# Phase 1: Collection
-dns_eid = store.evidence("nslookup output: 198.51.100.42")
-dns_claim = harvester.claim(
-    "suspicious-domain.example resolves to 198.51.100.42",
-    evidence=[dns_eid], confidence=0.99, method="tool:nslookup"
-)
-
-# Phase 2: Analysis
-infra_claim = analyzer.claim(
-    "Bulletproof hosting detected (ns1.bulletproof-hosting.example)",
-    evidence=[dns_claim.claim_id, whois_claim.claim_id],
-    confidence=0.80, method="llm:correlation"
-)
-
-# Phase 3: Report
-report = reporter.claim(
-    "ASSESSMENT: Likely threat actor. Recommend blocking.",
-    evidence=[infra_claim.claim_id, actor_claim.claim_id],
-    confidence=0.75, method="human:assessment"
-)
-
-# Trace the full chain
-chain = store.trace(report.claim_id)</code></pre>
-
-<h3>4.3 Trace Output</h3>
-
-<div class="trace-box">
-<span class="agent">ASSESSMENT</span>: Likely threat actor (<span class="conf-mid">conf: 0.75</span>, reporter)<br>
-&nbsp;&nbsp;└─ <span class="agent">Bulletproof hosting detected</span> (<span class="conf-mid">conf: 0.80</span>, analyzer)<br>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ <span class="agent">Resolves to 198.51.100.42</span> (<span class="conf-high">conf: 0.99</span>, harvester) → <span class="evidence">[DNS output]</span><br>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└─ <span class="agent">ShadyRegistrar, Panama</span> (<span class="conf-high">conf: 0.95</span>, harvester) → <span class="evidence">[WHOIS record]</span><br>
-&nbsp;&nbsp;└─ <span class="agent">Threat actor TTP pattern</span> (<span class="conf-mid">conf: 0.70</span>, analyzer)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="agent">ShadyRegistrar, Panama</span> (shared reference)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <span class="agent">nginx/1.18 + PHP/7.4</span> (<span class="conf-high">conf: 0.99</span>, harvester) → <span class="evidence">[HTTP headers]</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="agent">Bulletproof hosting detected</span> (shared reference)
-</div>
-
-<p>All 6 signatures verified. Zero unsupported claims. Zero broken references. The entire reasoning chain is inspectable.</p>
-
-<h2>5. Operations</h2>
-
-<table>
-  <tr><th>Operation</th><th>Command</th><th>Purpose</th></tr>
-  <tr><td>Trace</td><td><code>lattice trace &lt;id&gt;</code></td><td>Walk backward from conclusion to evidence</td></tr>
-  <tr><td>Audit</td><td><code>lattice audit</code></td><td>Find unsupported claims, low confidence, broken refs</td></tr>
-  <tr><td>Verify</td><td><code>lattice verify</code></td><td>Check Ed25519 signatures on all claims</td></tr>
-  <tr><td>Stats</td><td><code>lattice stats</code></td><td>Summary metrics for the investigation</td></tr>
-  <tr><td>Export</td><td><code>lattice export</code></td><td>Serialize investigation as JSON</td></tr>
-</table>
-
-<div class="page-break"></div>
-
+<p style="margin:4px 0;">LATTICE is built on four principles:</p>
+<p style="margin:4px 0;"><strong>Minimality.</strong> The library should be easy to integrate into existing workflows. It depends only on Python's standard library plus three packages (cryptography, click, rich). Storage is SQLite. There is no external service, no cloud dependency, no daemon to manage.</p>
+<p style="margin:4px 0;"><strong>Framework agnosticism.</strong> LATTICE is not an agent framework. It does not orchestrate agents, manage conversations, or handle tool calls. It records what agents did and why. This means it can sit underneath LangGraph, CrewAI, AutoGen, or raw Python scripts without requiring changes to the agent logic itself.</p>
+<p style="margin:4px 0;"><strong>Verifiability by default.</strong> Every Claim is content-addressed (SHA-256) and signed (Ed25519) at creation time. Verification is a single function call. There is no "opt-in" to accountability; it is the default behavior.</p>
+<p style="margin:4px 0;"><strong>Offline-first.</strong> The entire system runs locally. Investigation data, agent keys, and the reasoning DAG never leave the machine unless the user explicitly exports them. This is a hard requirement for security work.</p>
+<h3>3.2 Core Primitives</h3>
+<p style="margin:4px 0;"><strong>Evidence</strong> is a content-addressed blob of raw data: tool output, API responses, DNS records, WHOIS results, or any other artifact. Evidence is identified by the SHA-256 hash of its content. Storing the same data twice is idempotent.</p>
+<p style="margin:4px 0;"><strong>Claim</strong> is the fundamental unit of the DAG. A Claim represents an assertion made by a specific agent, supported by specific evidence. Its fields are:</p>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Field</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Type</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Description</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`claim_id`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">string</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">SHA-256 hash of canonical JSON of all content fields</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`agent_id`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">string</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Identifier of the originating agent</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`assertion`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">string</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Human-readable statement of what is claimed</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`evidence`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">list[string]</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Claim IDs or Evidence IDs this depends on</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`confidence`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">float</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Value in [0.0, 1.0]</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`method`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">string</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">How the claim was derived (e.g., `tool:nslookup`, `llm:gpt-4`)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`timestamp`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">float</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Unix timestamp</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`metadata`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">dict</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Arbitrary key-value pairs</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">`signature`</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">string</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Hex-encoded Ed25519 signature over `claim_id`</td></tr>
+</tbody></table>
+<p style="margin:4px 0;">The <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">claim_id</code> is computed deterministically from the content fields using canonical JSON serialization (sorted keys, no whitespace). This means the same assertion with the same evidence at the same timestamp will always produce the same ID. It also means that any modification to a stored claim will produce a different hash, making tampering detectable.</p>
+<p style="margin:4px 0;"><strong>Agent</strong> is a registered entity with an Ed25519 keypair. When a claim is created through an agent handle, the private key signs the <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">claim_id</code>. Any party with access to the agent's public key can later verify that the claim was produced by that specific agent and has not been modified.</p>
+<h3>3.3 The Claim DAG</h3>
+<p style="margin:4px 0;">Claims reference other claims and evidence through the <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">evidence</code> field, forming a Directed Acyclic Graph:</p>
+<p style="margin:4px 0;">- <strong>Leaf nodes</strong> are raw Evidence blobs (tool output, API responses).</p>
+<p style="margin:4px 0;">- <strong>Intermediate nodes</strong> are derived Claims (analysis, correlation, cross-referencing).</p>
+<p style="margin:4px 0;">- <strong>Root nodes</strong> are final conclusions (assessment, report summary).</p>
+<p style="margin:4px 0;">Walking backward from any root node traverses the complete reasoning chain. At each node, the investigator can see who made the claim, what evidence it rests on, how confident the agent was, and what method was used.</p>
+<h3>3.4 Effective Confidence (v1.2.0+)</h3>
+<p style="margin:4px 0;">A key addition in v1.2.0 is <strong>effective confidence</strong>: the propagated confidence of a claim accounting for the weakest link in its dependency chain. While stated confidence is the value assigned by the originating agent, effective confidence is the minimum confidence encountered along any path from the claim to its leaf evidence nodes.</p>
+<p style="margin:4px 0;">This addresses a critical limitation of raw confidence values: a claim with confidence 0.95 that depends on a claim with confidence 0.40 is effectively no more reliable than 0.40. Effective confidence makes this explicit.</p>
+<p style="margin:4px 0;">The computation uses min-path propagation through the DAG. For a claim <em>c</em> with parent claims <em>p₁, p₂, ..., pₖ</em>:</p>
+<pre style="background:#f5f5f5;padding:12px;border-radius:4px;font-size:10px;overflow-x:auto;">
+eff_conf(c) = min(c.confidence, min(eff_conf(pᵢ) for pᵢ in parents(c)))
+</pre>
+<p style="margin:4px 0;">Benchmarks show that single-claim effective confidence computes in 1.63 ms on a 100-node DAG, while the bulk operation (computing effective confidence for all claims simultaneously) achieves 1.90 ms for the same graph—demonstrating amortized efficiency. At scale, a 10,000-node DAG completes bulk effective confidence in 115.88 ms.</p>
+<h3>3.5 Revocation Waterfall (v1.1.0+)</h3>
+<p style="margin:4px 0;">When evidence is invalidated or an agent is compromised, LATTICE supports <strong>revocation waterfall</strong>: revoking a claim automatically propagates revocation to all downstream claims that depend on it. This cascading invalidation ensures that no conclusion resting on tainted evidence survives undetected.</p>
+<p style="margin:4px 0;">Benchmarks show linear scaling: revoking a 100-claim chain completes in 3.76 ms, while a 1,000-claim chain completes in 343.59 ms. The 5,000-claim chain (a stress test beyond typical usage) completes in 8.62 seconds.</p>
+<h3>3.6 Storage</h3>
+<p style="margin:4px 0;">All data is stored in a single SQLite database with three tables: <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">agents</code>, <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">claims</code>, and <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">evidence</code>. SQLite was chosen because it requires no server, supports WAL mode for concurrent reads, and is available on every platform where Python runs. The database lives in a <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">.lattice/</code> directory inside the investigation project folder.</p>
+<h3>3.7 Dashboard (v1.2.0+)</h3>
+<p style="margin:4px 0;">LATTICE includes a real-time web dashboard built with FastAPI and D3.js. The dashboard provides:</p>
+<p style="margin:4px 0;">- Interactive DAG visualization with force-directed layout</p>
+<p style="margin:4px 0;">- Per-claim detail inspection (confidence, effective confidence, method, agent)</p>
+<p style="margin:4px 0;">- Agent contribution overview</p>
+<p style="margin:4px 0;">- Confidence distribution histograms</p>
+<p style="margin:4px 0;">- Audit findings display</p>
+<p style="margin:4px 0;">The dashboard runs locally and requires no external dependencies beyond FastAPI and uvicorn.</p>
+<h3>3.8 Operations</h3>
+<p style="margin:4px 0;">LATTICE provides the following core operations:</p>
+<p style="margin:4px 0;"><strong>Trace</strong> performs a breadth-first backward traversal from a given claim, returning all ancestor claims in dependency order. This is the primary accountability operation: given a conclusion, show everything that led to it. Benchmarked at 1.54 ms for a 100-claim chain.</p>
+<p style="margin:4px 0;"><strong>Audit</strong> scans the DAG for structural issues: claims with no evidence references (unsupported assertions), claims below a confidence threshold, broken references, and inflated confidence flags (where stated confidence exceeds effective confidence).</p>
+<p style="margin:4px 0;"><strong>Verify</strong> checks Ed25519 signatures on all claims against the registered public keys of their respective agents. Benchmarked at 46.49 ms for 100 claims.</p>
+<p style="margin:4px 0;"><strong>Stats</strong> computes summary metrics: claim count, evidence count, confidence distribution, method breakdown, and per-agent contribution. Benchmarked at 4.00 ms for 100 claims.</p>
+<p style="margin:4px 0;"><strong>Effective Confidence</strong> computes the propagated min-path confidence for individual claims or in bulk across the entire DAG.</p>
+<p style="margin:4px 0;"><strong>Revoke</strong> cascades revocation through the DAG when a claim or evidence is invalidated.</p>
+<p style="margin:4px 0;"><strong>Export</strong> serializes the entire investigation (agents, claims, metadata) as a JSON document for archival, sharing, or integration with other tools.</p>
+<hr>
+<h2>4. Benchmarks</h2>
+<p style="margin:4px 0;">All benchmarks were run on a single machine using LATTICE's integrated benchmark suite (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">benchmarks/run_benchmarks.py</code>). Results are stored in <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">benchmarks/results.json</code> and are reproducible.</p>
+<h3>4.1 DAG Traversal Scalability</h3>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">DAG Size</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Mean Latency (ms)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Std Dev (ms)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.15</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.03</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">50</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.39</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.06</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">100</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.69</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.08</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">500</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3.20</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.18</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">6.26</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.27</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">5,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">32.91</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.78</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">66.86</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3.92</td></tr>
+</tbody></table>
+<p style="margin:4px 0;">The traversal exhibits near-linear scaling (O(n^{1.03})), confirming that LATTICE's DAG operations are suitable for production workloads up to at least 10,000 claims.</p>
+<h3>4.2 Operation Latencies</h3>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Operation</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Mean (ms)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Std Dev (ms)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Evidence storage</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.008</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.007</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Claim creation</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.653</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.065</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Trace (100-chain)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.541</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.117</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Eff. confidence (single)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.627</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.568</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Eff. confidence (bulk, 100)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.904</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.354</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Audit (100 claims)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3.882</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.286</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Stats (100 claims)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3.999</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.806</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Verify all (100 claims)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">46.490</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">2.599</td></tr>
+</tbody></table>
+<p style="margin:4px 0;">Evidence storage is sub-0.01 ms. Claim creation averages 0.65 ms including SHA-256 hashing and Ed25519 signing. Signature verification is the most expensive operation at 46.49 ms for 100 claims (0.46 ms/claim), as expected for public-key cryptography.</p>
+<h3>4.3 Effective Confidence Scaling</h3>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">DAG Size</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Single (ms)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Bulk (ms)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Speedup</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.13</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.09</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.5×</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">100</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.55</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.82</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.9×</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">16.03</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10.30</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.6×</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">180.18</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">115.88</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.6×</td></tr>
+</tbody></table>
+<p style="margin:4px 0;">The bulk operation consistently outperforms per-claim computation by approximately 1.6×, demonstrating effective memoization across DAG traversals.</p>
+<h3>4.4 Revocation Waterfall</h3>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Chain Length</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Revocation Time (ms)</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Affected Claims</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">0.35</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">10</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">50</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1.26</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">50</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">100</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3.76</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">100</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">500</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">84.65</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">500</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">343.59</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">1,000</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">5,000</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">8,615.45</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">5,000</td></tr>
+</tbody></table>
+<p style="margin:4px 0;">Revocation is linear up to ~500 claims, with superlinear growth beyond that due to cascading dependency resolution. For typical investigative DAGs (10–500 claims), revocation completes in under 100 ms.</p>
+<h3>4.5 Instrumentation Overhead</h3>
+<p style="margin:4px 0;">Compared to bare function calls, LATTICE's instrumentation adds 0.226 ms of overhead per operation. For a pipeline producing tens to hundreds of claims, the total overhead is measured in milliseconds—negligible compared to network I/O, tool execution, or LLM inference.</p>
+<hr>
+<h2>5. Demonstration: OSINT Investigation Pipeline</h2>
+<p style="margin:4px 0;">To illustrate LATTICE in practice, we instrument a three-agent OSINT investigation targeting a suspicious domain.</p>
+<h3>5.1 Agent Roles</h3>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Agent</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Role</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Methods</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Harvester</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Collector</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">DNS lookup, WHOIS query, HTTP inspection, certificate transparency, passive DNS</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Analyzer</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Analyst</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Cross-reference infrastructure, correlate indicators</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Reporter</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Reporter</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Synthesize findings into a risk assessment</td></tr>
+</tbody></table>
+<h3>5.2 Investigation Flow</h3>
+<p style="margin:4px 0;"><strong>Phase 1: Collection (0.84 ms).</strong> The Harvester agent performs DNS resolution (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">tool:nslookup</code>), WHOIS lookup (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">tool:whois</code>), HTTP header inspection (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">tool:httpx</code>), certificate transparency queries (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">tool:crt.sh</code>), and passive DNS lookups (<code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">tool:passivedns</code>). Each tool output is stored as Evidence. Each finding is recorded as a signed Claim referencing the corresponding evidence. The phase produces 5 claims backed by 5 evidence blobs.</p>
+<p style="margin:4px 0;"><strong>Phase 2: Analysis (0.45 ms).</strong> The Analyzer agent creates 3 derived Claims using <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">llm:analysis</code> by cross-referencing the Harvester's findings. For example, it correlates the IP address from DNS with the nameserver from WHOIS to assert that the domain uses bulletproof hosting infrastructure. Each derived Claim references the source Claims it depends on and carries its own confidence level.</p>
+<p style="margin:4px 0;"><strong>Phase 3: Reporting (0.19 ms).</strong> The Reporter agent produces a final assessment Claim using <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">analyst:synthesis</code> that references the Analyzer's findings. The assessment includes a risk rating and recommendation.</p>
+<h3>5.3 Result</h3>
+<p style="margin:4px 0;">The resulting DAG contains 9 claims across 3 agents, with 5 evidence blobs at the leaves. The total pipeline time is 1.49 ms. Running <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">lattice trace</code> on the final assessment produces a complete reasoning chain. Running <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">lattice verify</code> confirms all signatures are valid.</p>
+<p style="margin:4px 0;">The audit identifies 1 issue: the final report has a stated confidence of 0.75 but an effective confidence of 0.70 (flagged as inflated confidence). This is because one upstream claim has confidence 0.70, creating a bottleneck that the reporter's stated confidence does not account for. The effective confidence mechanism surfaces this discrepancy automatically.</p>
+<h3>5.4 DAG Statistics</h3>
+<p style="margin:4px 0;">- <strong>Total agents:</strong> 3</p>
+<p style="margin:4px 0;">- <strong>Total claims:</strong> 9 (Harvester: 5, Analyzer: 3, Reporter: 1)</p>
+<p style="margin:4px 0;">- <strong>Total evidence:</strong> 5</p>
+<p style="margin:4px 0;">- <strong>DAG depth:</strong> 9</p>
+<p style="margin:4px 0;">- <strong>Average stated confidence:</strong> 0.862</p>
+<p style="margin:4px 0;">- <strong>Average effective confidence:</strong> 0.857</p>
+<p style="margin:4px 0;">- <strong>Minimum effective confidence:</strong> 0.70</p>
+<p style="margin:4px 0;">- <strong>Methods used:</strong> tool:nslookup, tool:whois, tool:httpx, tool:crt.sh, tool:passivedns, llm:analysis, analyst:synthesis</p>
+<hr>
 <h2>6. Discussion</h2>
-
 <h3>6.1 What LATTICE Solves</h3>
-
-<p><strong>Backward traceability.</strong> Any conclusion can be traced to its supporting evidence. This is essential for client-facing security reports, journalistic fact-checking, and regulatory compliance.</p>
-
-<p><strong>Tamper evidence.</strong> Content-addressing and cryptographic signatures make it computationally infeasible to modify a claim without detection. This provides integrity assurance without requiring blockchain or distributed consensus.</p>
-
-<p><strong>Agent attribution.</strong> Each claim is tied to a specific agent identity. When a conclusion is wrong, it is possible to identify which agent introduced the error and at what step.</p>
-
-<h3>6.2 Limitations</h3>
-
-<p><strong>Confidence propagation.</strong> In v0.1, confidence values are metadata set by agents. They do not automatically propagate through the DAG. Bayesian belief propagation is mathematically well-defined, but the choice of priors and conditional dependencies is a research question. We plan to add pluggable propagation models in a future version, clearly marked as experimental.</p>
-
-<p><strong>Deterministic replay.</strong> LATTICE records what agents concluded, not the exact computational state. Because LLM outputs are non-deterministic, re-running the same agents with the same evidence will generally produce different results. What LATTICE can show is that removing a specific piece of evidence eliminates support for downstream claims (static graph analysis).</p>
-
-<p><strong>Trust in agents.</strong> LATTICE verifies that claims were signed by the agents that produced them and have not been modified. It does not verify that agents themselves are trustworthy or that their reasoning is sound. A compromised agent can sign false claims that will pass signature verification.</p>
-
+<p style="margin:4px 0;">LATTICE addresses a specific and well-defined problem: the absence of standardized accountability infrastructure for multi-agent AI reasoning. By making every decision content-addressed, signed, and connected in a DAG, it enables three capabilities that are currently missing from the multi-agent ecosystem:</p>
+<p style="margin:4px 0;"><strong>Backward traceability.</strong> Any conclusion can be traced to its supporting evidence. This is essential for client-facing security reports, journalistic fact-checking, and regulatory compliance.</p>
+<p style="margin:4px 0;"><strong>Tamper evidence.</strong> Content-addressing and cryptographic signatures make it computationally infeasible to modify a claim without detection. This provides a basic level of integrity assurance without requiring blockchain or distributed consensus.</p>
+<p style="margin:4px 0;"><strong>Agent attribution.</strong> Each claim is tied to a specific agent identity. When a conclusion is wrong, it is possible to identify which agent introduced the error and at what step in the reasoning chain.</p>
+<p style="margin:4px 0;"><strong>Confidence integrity.</strong> Effective confidence propagation exposes inflated confidence values that do not account for weak links in the dependency chain—a common failure mode in automated analysis pipelines.</p>
+<h3>6.2 Limitations and Honest Scoping</h3>
+<p style="margin:4px 0;">LATTICE does not solve several related problems, and it is important to be explicit about these boundaries.</p>
+<p style="margin:4px 0;"><strong>Deterministic replay.</strong> LATTICE records what agents concluded, not the exact computational state that led to the conclusion. Because LLM outputs are non-deterministic, "replaying" an investigation by re-running the same agents with the same evidence will generally produce different results. What LATTICE can do is show that removing a specific piece of evidence eliminates the support for downstream claims (static graph analysis). This is useful, but it is not true replay.</p>
+<p style="margin:4px 0;"><strong>Trust in agents.</strong> LATTICE verifies that claims were signed by the agents that claim to have produced them, and that the claims have not been modified. It does not verify that the agents themselves are trustworthy or that their reasoning is sound. A compromised agent can sign false claims that will pass signature verification. Adversarial agent monitoring is a separate problem.</p>
+<p style="margin:4px 0;"><strong>Scale beyond 10,000 claims.</strong> While benchmarks confirm good performance up to 10,000 claims, extremely large investigative DAGs (100,000+ claims) have not been tested. Sharded storage or distributed coordination may be needed at that scale.</p>
 <h3>6.3 Connection to Broader Research</h3>
-
-<p><strong>Auditable hyper-investigation.</strong> Le Deuff's concept of hyper-investigation (2019) foregrounds the epistemic and civic dimensions of open-source inquiry. LATTICE provides technical infrastructure for a core requirement: that investigative conclusions be traceable, challengeable, and defensible.</p>
-
-<p><strong>EU AI Act compliance.</strong> The EU AI Act requires high-risk AI systems to provide explanations. A claim DAG with provenance and confidence metadata is a natural compliance format.</p>
-
-<p><strong>Structured Analytic Techniques as protocols.</strong> The Claim/Evidence/Confidence structure maps naturally to SATs like Analysis of Competing Hypotheses. A future extension could formalize SATs as inter-agent communication protocols.</p>
-
+<p style="margin:4px 0;">LATTICE relates to ongoing work in several areas:</p>
+<p style="margin:4px 0;"><strong>Auditable hyper-investigation.</strong> Le Deuff's concept of hyper-investigation (2019) foregrounds the epistemic and civic dimensions of open-source inquiry. LATTICE provides technical infrastructure for one of the core requirements of hyper-investigation: that investigative conclusions be traceable, challengeable, and ultimately defensible.</p>
+<p style="margin:4px 0;"><strong>AI transparency and the EU AI Act.</strong> The EU AI Act (Regulation 2024/1689) requires that high-risk AI systems provide explanations of their outputs. A claim DAG with full provenance and confidence metadata is a natural format for meeting this requirement.</p>
+<p style="margin:4px 0;"><strong>Structured Analytic Techniques.</strong> The Claim/Evidence/Confidence structure maps naturally to SATs like Analysis of Competing Hypotheses. A future extension could formalize SATs as inter-agent communication protocols, enabling automated devil's advocacy and red-teaming.</p>
+<p style="margin:4px 0;"><strong>Space systems autonomy.</strong> Multi-agent architectures are increasingly relevant for autonomous space systems where communication latency precludes real-time human oversight. LATTICE's offline-first, cryptographically verifiable accountability layer is directly applicable to mission-critical autonomous decision-making in bandwidth-constrained environments.</p>
+<hr>
 <h2>7. Future Work</h2>
-
-<table>
-  <tr><th>Version</th><th>Feature</th><th>Description</th></tr>
-  <tr><td>v0.2</td><td>Framework adapters</td><td>Integration plugins for LangGraph, CrewAI, AutoGen</td></tr>
-  <tr><td>v0.3</td><td>Confidence propagation</td><td>Pluggable Bayesian propagation modules</td></tr>
-  <tr><td>v0.4</td><td>Web dashboard</td><td>Interactive DAG visualization</td></tr>
-  <tr><td>Research</td><td>SATs as protocols</td><td>ACH and Devil's Advocacy as agent communication schemas</td></tr>
-</table>
-
+<p style="margin:4px 0;"><strong>Framework adapters.</strong> Integration plugins for LangGraph, CrewAI, and AutoGen, allowing users to add accountability to existing pipelines with minimal code changes.</p>
+<p style="margin:4px 0;"><strong>Advanced confidence models.</strong> Beyond min-path propagation, pluggable Bayesian propagation modules for more nuanced uncertainty flow through the DAG (e.g., weighted aggregation, conditional probability chains).</p>
+<p style="margin:4px 0;"><strong>Distributed LATTICE.</strong> Federation protocol enabling multiple LATTICE instances to share and cross-reference claim DAGs across organizational boundaries while preserving cryptographic integrity.</p>
+<p style="margin:4px 0;"><strong>SATs as agent protocols.</strong> Formalization of Analysis of Competing Hypotheses, Devil's Advocacy, and Team A/Team B as JSON-defined inter-agent communication schemas. This is the most academically novel extension and a natural target for a conference paper.</p>
+<p style="margin:4px 0;"><strong>Temporal reasoning.</strong> Time-windowed claim validity, automatic staleness detection, and re-verification triggers for claims that depend on time-sensitive evidence (e.g., DNS records, certificate status).</p>
+<p style="margin:4px 0;"><strong>Adversarial robustness testing.</strong> Formal analysis of LATTICE's guarantees under adversarial conditions: compromised agents, poisoned evidence, and collusion attacks.</p>
+<hr>
 <h2>8. Conclusion</h2>
-
-<p>Multi-agent AI systems in cybersecurity and intelligence need accountability infrastructure the same way software development needs version control. The ability to trace conclusions backward, verify integrity, and attribute decisions to specific agents is not a feature. It is a prerequisite for professional use.</p>
-
-<p>LATTICE provides this infrastructure in a minimal, framework-agnostic, offline-first Python library. It is available under an MIT license at <strong>github.com/alibhutto69/lattice</strong>.</p>
-
+<p style="margin:4px 0;">Multi-agent AI systems in cybersecurity and intelligence need accountability infrastructure the same way software development needs version control. The ability to trace conclusions backward, verify integrity, and attribute decisions to specific agents is not a nice-to-have feature. It is a prerequisite for professional use.</p>
+<p style="margin:4px 0;">LATTICE provides this infrastructure in a minimal, framework-agnostic, offline-first Python library. It has matured from a prototype to a production-ready tool with effective confidence propagation, revocation waterfall cascades, a web dashboard, and empirically validated performance characteristics across 89 automated tests and comprehensive benchmarks.</p>
+<p style="margin:4px 0;">The library is available under an MIT license at https://github.com/thunderstornX/lattice.</p>
+<hr>
 <h2>References</h2>
-
-<div class="references">
-<p>Cresci, S. (2020). A decade of social bot detection. <em>Communications of the ACM</em>, 63(10), 72-83.</p>
-<p>Heuer, R. J., & Pherson, R. H. (2010). <em>Structured Analytic Techniques for Intelligence Analysis</em>. CQ Press.</p>
-<p>Le Deuff, O., & Perret, A. (2019). Hyperdocumentation: origin and evolution of a concept. <em>Journal of Documentation</em>, 75(6), 1463-1474.</p>
-<p>Le Deuff, O., & Roumanos, R. (2022). Enjeux definitionnels et scientifiques de la litteratie algorithmique. <em>Communication & langages</em>, 211, 133-150.</p>
-<p>Moreau, L., & Missier, P. (2013). PROV-DM: The PROV Data Model. W3C Recommendation.</p>
-<p>Pacheco, D., et al. (2021). Uncovering coordinated networks on social media. <em>Proceedings of the International AAAI Conference on Web and Social Media</em>.</p>
-</div>
-
-<div class="page-break"></div>
-
+<p style="margin:4px 0;">Cresci, S. (2020). A decade of social bot detection. <em>Communications of the ACM</em>, 63(10), 72-83.</p>
+<p style="margin:4px 0;">Heuer, R. J., & Pherson, R. H. (2010). <em>Structured Analytic Techniques for Intelligence Analysis</em>. CQ Press.</p>
+<p style="margin:4px 0;">Le Deuff, O., & Perret, A. (2019). Hyperdocumentation: origin and evolution of a concept. <em>Journal of Documentation</em>, 75(6), 1463-1474.</p>
+<p style="margin:4px 0;">Le Deuff, O., & Roumanos, R. (2022). Enjeux définitionnels et scientifiques de la littératie algorithmique. <em>Communication & langages</em>, 211, 133-150.</p>
+<p style="margin:4px 0;">Moreau, L., & Missier, P. (2013). PROV-DM: The PROV Data Model. W3C Recommendation.</p>
+<p style="margin:4px 0;">Pacheco, D., et al. (2021). Uncovering coordinated networks on social media. <em>Proceedings of the International AAAI Conference on Web and Social Media</em>.</p>
+<hr>
 <h2>Appendix A: Technical Specifications</h2>
-
-<table class="spec-table">
-  <tr><th>Component</th><th>Implementation</th></tr>
-  <tr><td>Language</td><td>Python 3.8+</td></tr>
-  <tr><td>Storage</td><td>SQLite (WAL mode)</td></tr>
-  <tr><td>Hashing</td><td>SHA-256</td></tr>
-  <tr><td>Signatures</td><td>Ed25519 (cryptography library)</td></tr>
-  <tr><td>CLI</td><td>Click + Rich</td></tr>
-  <tr><td>External dependencies</td><td>3 packages</td></tr>
-  <tr><td>Lines of code</td><td>~1,850</td></tr>
-  <tr><td>Test coverage</td><td>41 tests, all passing</td></tr>
-  <tr><td>License</td><td>MIT</td></tr>
-  <tr><td>Repository</td><td>github.com/alibhutto69/lattice</td></tr>
-</table>
-
-</body>
-</html>
+<table style="border-collapse:collapse;width:100%;margin:12px 0;"><tbody>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Component</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Implementation</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Language</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Python 3.10+</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Storage</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">SQLite (WAL mode)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Hashing</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">SHA-256</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Signatures</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Ed25519 (via `cryptography` library)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">CLI</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Click + Rich</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Dashboard</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">FastAPI + D3.js</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Dependencies</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">3 core + 2 optional (dashboard)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Test suite</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">89 tests (pytest)</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">Lines of code</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">~2,400</td></tr>
+<tr><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">License</td><td style="border:1px solid #ddd;padding:6px 10px;font-size:10px;">MIT</td></tr>
+</tbody></table>
+<h2>Appendix B: Benchmark Graphs</h2>
+<p style="margin:4px 0;">All benchmarks are reproducible via <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:10px;">PYTHONPATH=. python3 benchmarks/run_benchmarks.py</code>.</p>
+<figure style="text-align:center;margin:16px 0;"><img src="images/scalability.png" style="max-width:100%;" alt="DAG Traversal Scalability"><figcaption style="font-size:9px;color:#666;">DAG Traversal Scalability</figcaption></figure>
+<figure style="text-align:center;margin:16px 0;"><img src="images/operations.png" style="max-width:100%;" alt="Operation Latency Comparison"><figcaption style="font-size:9px;color:#666;">Operation Latency Comparison</figcaption></figure>
+<figure style="text-align:center;margin:16px 0;"><img src="images/effective_confidence.png" style="max-width:100%;" alt="Effective Confidence Scaling"><figcaption style="font-size:9px;color:#666;">Effective Confidence Scaling</figcaption></figure>
+<figure style="text-align:center;margin:16px 0;"><img src="images/revocation.png" style="max-width:100%;" alt="Revocation Waterfall Performance"><figcaption style="font-size:9px;color:#666;">Revocation Waterfall Performance</figcaption></figure>
+<figure style="text-align:center;margin:16px 0;"><img src="images/case_study.png" style="max-width:100%;" alt="Case Study: 3-Agent OSINT Pipeline"><figcaption style="font-size:9px;color:#666;">Case Study: 3-Agent OSINT Pipeline</figcaption></figure></body></html>

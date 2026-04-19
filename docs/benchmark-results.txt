@@ -1,0 +1,92 @@
+LATTICE Performance Benchmarks
+Python 3.8.10 (default, Mar 18 2025, 20:04:55) 
+[GCC 9.4.0]
+LATTICE v1.2.0
+
+======================================================================
+EXPERIMENT 1: Scalability - Claim Creation Time vs DAG Size
+======================================================================
+  DAG size     10: 0.1556 ms (+/- 0.0399)
+  DAG size     50: 0.3788 ms (+/- 0.0538)
+  DAG size    100: 0.7863 ms (+/- 0.3320)
+  DAG size    500: 2.7816 ms (+/- 0.1924)
+  DAG size   1000: 6.1954 ms (+/- 0.6024)
+  DAG size   2000: 12.4236 ms (+/- 0.8744)
+
+======================================================================
+EXPERIMENT 2: Operation Overhead Breakdown
+======================================================================
+  Evidence storage:      0.0086 ms (+/- 0.0046)
+  Claim creation+sign:   0.7624 ms (+/- 0.1374)
+  Verify all (100+):     43.1724 ms (+/- 2.3486)
+  Trace (100 chain):     1.4556 ms (+/- 0.1893)
+  Audit (100 claims):    3.8373 ms (+/- 0.3573)
+  Eff. confidence (1):   1.3570 ms (+/- 0.2005)
+  Eff. confidence bulk:  1.8749 ms (+/- 0.3364)
+  Stats:                 3.6057 ms (+/- 1.2062)
+
+======================================================================
+EXPERIMENT 3: Revocation Waterfall Performance
+======================================================================
+  Chain    10: 0.2472 ms, 10 claims affected
+  Chain    50: 1.2775 ms, 50 claims affected
+  Chain   100: 3.7042 ms, 100 claims affected
+  Chain   500: 87.1606 ms, 500 claims affected
+  Chain  1000: 339.6537 ms, 1000 claims affected
+  Chain  2000: 1538.3311 ms, 2000 claims affected
+
+======================================================================
+EXPERIMENT 4: Effective Confidence Scaling
+======================================================================
+  DAG     10: single 0.1341 ms, bulk 0.0847 ms
+  DAG     50: single 0.8193 ms, bulk 0.4562 ms
+  DAG    100: single 1.5595 ms, bulk 1.0761 ms
+  DAG    500: single 8.3711 ms, bulk 5.3529 ms
+  DAG   1000: single 16.0721 ms, bulk 9.2564 ms
+  DAG   2000: single 25.8601 ms, bulk 18.3285 ms
+
+======================================================================
+EXPERIMENT 5: Instrumentation Overhead (With vs Without LATTICE)
+======================================================================
+  Bare function:     0.000220 ms (+/- 0.000037)
+  With @lattice_monitor: 0.1926 ms (+/- 0.0146)
+  Overhead:          0.1923 ms (87374.4%)
+
+======================================================================
+EXPERIMENT 6: Case Study - Synthetic OSINT Pipeline
+======================================================================
+
+  Pipeline:
+    Agents: 3
+    Claims: 9
+    Evidence blobs: 5
+    DAG depth: 9
+    Collection: 0.6876 ms
+    Analysis:   0.4386 ms
+    Reporting:  0.1716 ms
+    Total:      1.2995 ms
+
+  Verification:
+    All signatures valid: True
+    Audit issues: 1
+    Inflated confidence flags: 1
+
+  Confidence Analysis:
+    Final report stated:    0.75
+    Final report effective: 0.70
+    Min effective in DAG:   0.70
+    Avg effective in DAG:   0.86
+
+  Trace from final report:
+    [reporter] 0.75 (eff:0.70) [INFLATED] ASSESSMENT: suspicious.example is likely a phishing ope
+      [analyzer] 0.80 (eff:0.80) 198.51.100.42 is on bulletproof hosting (ns1.bulletproo
+        [analyzer] 0.70 (eff:0.70) Operator uses Panama shell entity with bulletproof host
+          [analyzer] 0.75 (eff:0.75) Infrastructure consistent with phishing kit deployment 
+            [harvester] 0.99 (eff:0.99) DNS resolution: nslookup suspicious.example -> 198.51.1
+              [harvester] 0.85 (eff:0.85) Passive DNS history: IP 198.51.100.42 seen hosting 12 o
+                [harvester] 0.95 (eff:0.95) WHOIS lookup: Registrar: ShadyRegistrar, Panama; Create
+                  [harvester] 0.99 (eff:0.99) HTTP fingerprint: Server: nginx/1.18, PHP/7.4, tracking
+                    [harvester] 0.98 (eff:0.98) Certificate transparency: Let's Encrypt cert issued 202
+
+======================================================================
+Results saved to benchmarks/results.json

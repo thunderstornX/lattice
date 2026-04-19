@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 18mm 20mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5px; line-height: 1.5; color: #1a1a1a; padding: 0; }
+  .header { text-align: center; border-bottom: 2px solid #1e3a5f; padding-bottom: 10px; margin-bottom: 14px; }
+  .header h1 { font-size: 20px; color: #1e3a5f; letter-spacing: 1px; margin-bottom: 2px; }
+  .header .subtitle { font-size: 11px; color: #555; }
+  .header .version { font-size: 9px; color: #888; margin-top: 2px; }
+  h2 { font-size: 12px; color: #1e3a5f; border-bottom: 1px solid #d0d0d0; padding-bottom: 3px; margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cols { display: flex; gap: 20px; }
+  .col { flex: 1; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
+  .stat { background: #f4f7fb; border-radius: 4px; padding: 6px 8px; text-align: center; }
+  .stat .num { font-size: 16px; font-weight: 700; color: #1e3a5f; }
+  .stat .label { font-size: 8.5px; color: #666; }
+  ul { padding-left: 14px; margin: 4px 0; }
+  li { margin-bottom: 2px; }
+  .footer { text-align: center; border-top: 1px solid #d0d0d0; padding-top: 8px; margin-top: 14px; font-size: 9px; color: #666; }
+  .footer a { color: #1e3a5f; text-decoration: none; }
+  code { background: #f0f0f0; padding: 1px 3px; border-radius: 2px; font-size: 9.5px; }
+  .highlight { background: #e8f0fe; border-left: 3px solid #1e3a5f; padding: 6px 10px; margin: 6px 0; border-radius: 0 4px 4px 0; font-size: 10px; }
+</style>
+</head><body>
+
+<div class="header">
+  <h1>LATTICE</h1>
+  <div class="subtitle">Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution</div>
+  <div class="version">v1.2.1 · Content-Addressed Accountability Protocol for Multi-Agent AI Systems</div>
+</div>
+
+<div class="highlight">
+  LATTICE is a framework-agnostic Python library that makes every AI agent decision <strong>traceable</strong>, <strong>tamper-evident</strong>, and <strong>auditable</strong>. Every claim is content-addressed (SHA-256), cryptographically signed (Ed25519), and linked in a Directed Acyclic Graph from conclusions to raw evidence.
+</div>
+
+<div class="cols">
+<div class="col">
+
+<h2>Key Capabilities</h2>
+<ul>
+  <li><strong>Backward Traceability</strong> — Walk from any conclusion to its raw evidence</li>
+  <li><strong>Tamper Detection</strong> — Content-addressed claims + Ed25519 signatures</li>
+  <li><strong>Effective Confidence</strong> — Min-path propagation exposes inflated confidence</li>
+  <li><strong>Revocation Waterfall</strong> — Cascade invalidation through dependency graph</li>
+  <li><strong>Runtime Monitoring</strong> — Zero-friction <code>@lattice_monitor</code> decorator</li>
+  <li><strong>Web Dashboard</strong> — FastAPI + D3.js interactive DAG visualization</li>
+  <li><strong>CLI</strong> — <code>lattice trace|audit|verify|stats|export</code></li>
+</ul>
+
+<h2>Performance</h2>
+<div class="stat-grid">
+  <div class="stat"><div class="num">0.65 ms</div><div class="label">Claim creation + signing</div></div>
+  <div class="stat"><div class="num">66.9 ms</div><div class="label">10K-node DAG traversal</div></div>
+  <div class="stat"><div class="num">0.23 ms</div><div class="label">Instrumentation overhead</div></div>
+  <div class="stat"><div class="num">O(n<sup>1.03</sup>)</div><div class="label">Near-linear scaling</div></div>
+</div>
+
+<h2>Architecture</h2>
+<ul>
+  <li><strong>Storage:</strong> SQLite (WAL mode) — single portable file</li>
+  <li><strong>Crypto:</strong> SHA-256 content addressing + Ed25519 signatures</li>
+  <li><strong>Dependencies:</strong> 3 core packages (cryptography, click, rich)</li>
+  <li><strong>Offline-first:</strong> No cloud, no external services</li>
+  <li><strong>Framework-agnostic:</strong> Works under LangGraph, CrewAI, AutoGen, or raw Python</li>
+</ul>
+
+</div>
+<div class="col">
+
+<h2>Case Study: OSINT Pipeline</h2>
+<p>Three-agent investigation (Harvester → Analyzer → Reporter) completing in <strong>1.49 ms</strong>:</p>
+<ul>
+  <li>9 signed claims across 3 agents, backed by 5 evidence blobs</li>
+  <li>7 collection methods (nslookup, WHOIS, HTTP, crt.sh, passive DNS, LLM analysis, synthesis)</li>
+  <li>Audit detected 1 inflated confidence: stated 0.75, effective 0.70</li>
+  <li>All signatures cryptographically verified</li>
+</ul>
+
+<h2>Test Suite</h2>
+<ul>
+  <li><strong>89 tests</strong> covering content addressing, signatures, DAG traversal, revocation, cycle detection, effective confidence, CLI, dashboard API, and runtime monitor</li>
+  <li>CI via GitHub Actions on Python 3.10–3.13</li>
+</ul>
+
+<h2>Applications</h2>
+<ul>
+  <li><strong>OSINT & Threat Intelligence</strong> — Auditable investigation chains</li>
+  <li><strong>Security Consulting</strong> — Client-facing reports with provenance</li>
+  <li><strong>EU AI Act Compliance</strong> — Explainability via claim DAGs</li>
+  <li><strong>Autonomous Systems</strong> — Mission-critical decision accountability</li>
+  <li><strong>Research Pipelines</strong> — Reproducible multi-agent analysis</li>
+</ul>
+
+<h2>Technical Specs</h2>
+<ul>
+  <li>Python 3.10+ · MIT License · ~2,400 LOC</li>
+  <li><code>pip install lattice-core</code></li>
+  <li>Full benchmark suite included</li>
+</ul>
+
+</div>
+</div>
+
+<div class="footer">
+  <strong>Ali Murtaza Bhutto</strong> · ORCID: 0009-0007-2787-943X<br>
+  <a href="https://github.com/thunderstornX/lattice">github.com/thunderstornX/lattice</a> · alimurtazabhutto@proton.me
+</div>
+
+</body></html>
