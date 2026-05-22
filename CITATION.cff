@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use LATTICE in academic work, please cite it as below."
+type: software
+title: "LATTICE: Ledgered Agent Traces for Transparent, Inspectable Collaborative Execution"
+abstract: >-
+  LATTICE is the accountability layer that sits underneath any
+  agent framework, or raw Python functions. Every agent decision
+  becomes a content-addressed (SHA-256), cryptographically signed
+  (Ed25519) claim in a DAG you can trace backward from any
+  conclusion to raw evidence. Effective confidence (min-
+  propagation) prevents weak evidence from hiding behind strong
+  conclusions; the revocation waterfall propagates compromise
+  status to dependents; cycle detection enforces DAG acyclicity
+  at insertion time; the audit pass flags unsupported claims,
+  low confidence, broken references, and inflated confidence.
+  Includes a CLI, a local FastAPI + D3.js dashboard, and a
+  zero-friction monitor decorator for instrumenting existing
+  Python functions without behavioural change.
+authors:
+  - given-names: "Ali Murtaza"
+    family-names: "Bhutto"
+    orcid: "https://orcid.org/0009-0007-2787-943X"
+    affiliation: "SZABIST University (MSc Cybersecurity, 2026)"
+repository-code: "https://github.com/thunderstornX/lattice"
+url: "https://github.com/thunderstornX/lattice"
+license: MIT
+version: "1.2.2"
+date-released: "2026-05-22"
+# Zenodo DOI will be added here once the GitHub-integration mints
+# one for v1.2.2. If no DOI appears within a few minutes of the
+# GitHub Release going live, the repo needs to be toggled on at
+# https://zenodo.org/account/settings/github/
+keywords:
+  - multi-agent systems
+  - accountability
+  - audit log
+  - content addressing
+  - Ed25519
+  - SHA-256
+  - claim DAG
+  - effective confidence
+  - revocation waterfall
+  - OSINT
+  - AI safety
+  - explainable AI
