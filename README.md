@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/lattice-core.svg)](https://pypi.org/project/lattice-core/)
 [![GitHub release](https://img.shields.io/github/v/release/thunderstornX/lattice?color=orange&label=release)](https://github.com/thunderstornX/lattice/releases/latest)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20341934.svg)](https://doi.org/10.5281/zenodo.20341934)
 
 > Accountability layer for multi-agent AI systems. Every agent decision becomes a content-addressed, cryptographically signed claim in a DAG you can trace backward from any conclusion to raw evidence.
 
