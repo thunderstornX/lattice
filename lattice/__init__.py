@@ -13,7 +13,25 @@ Quick start::
     chain = store.trace(claim.claim_id)
 """
 
-__version__ = "1.2.0"
+# Single source of truth: read from installed metadata so __version__
+# tracks pyproject.toml automatically and can never drift (the bug we
+# hit in v1.2.0 -> v1.2.2 where __version__ was hand-edited and fell
+# behind by two minor versions).
+try:
+    from importlib.metadata import version as _pkg_version, PackageNotFoundError
+    try:
+        __version__ = _pkg_version("lattice-core")
+    except PackageNotFoundError:
+        # Editable install before any metadata exists (running from a
+        # fresh checkout without `pip install -e .`). Fall back to the
+        # in-tree pyproject string.
+        from pathlib import Path
+        import re as _re
+        _pyp = (Path(__file__).resolve().parent.parent / "pyproject.toml").read_text()
+        _m = _re.search(r'^version\s*=\s*"([^"]+)"', _pyp, _re.MULTILINE)
+        __version__ = _m.group(1) if _m else "0.0.0"
+except Exception:
+    __version__ = "0.0.0"
 
 from lattice.agent import AgentHandle
 from lattice.dag import (
