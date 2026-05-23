@@ -9,3 +9,7 @@ build/
 docs/paper/*.aux
 docs/paper/*.log
 docs/paper/*.out
+
+# Local-only marketing copy. The reproducible demo lives under docs/demo/.
+linkedin-post/
+.venv/
