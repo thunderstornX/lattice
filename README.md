@@ -129,7 +129,7 @@ def dns_lookup(domain: str) -> dict:
 
 Options: `confidence=0.9`, `evidence_ids=[...]` to link upstream claims, `capture_evidence=False` to skip evidence storage.
 
-Overhead: **0.24 ms per instrumented call** (see benchmarks).
+Overhead: **0.19 ms per instrumented call** (see benchmarks).
 
 ## Effective Confidence
 
@@ -236,13 +236,13 @@ Benchmarked on Intel Xeon E5-2676 v3, 2GB RAM, SSD, Ubuntu 20.04 (see `benchmark
 | Operation | Time |
 |-----------|------|
 | Evidence storage | 0.009 ms |
-| Claim creation + signing | 0.68 ms |
-| Trace (100-claim chain) | 1.36 ms |
-| Effective confidence (single) | 1.30 ms |
-| Effective confidence (bulk, 100) | 2.44 ms |
-| Audit (100 claims) | 4.01 ms |
-| Verify all signatures (100) | 43.33 ms |
-| Instrumentation overhead per call | 0.24 ms |
+| Claim creation + signing | 0.76 ms |
+| Trace (100-claim chain) | 1.46 ms |
+| Effective confidence (single) | 1.36 ms |
+| Effective confidence (bulk, 100) | 1.87 ms |
+| Audit (100 claims) | 3.84 ms |
+| Verify all signatures (100) | 43.17 ms |
+| Instrumentation overhead per call | 0.19 ms |
 
 Full scalability curves and case study results in the [paper](docs/pdf/LATTICE_Paper.pdf).
 

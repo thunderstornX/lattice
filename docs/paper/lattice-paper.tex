@@ -299,13 +299,13 @@ Table~\ref{tab:operations} profiles individual operations on a 100-claim chain D
 \textbf{Operation} & \textbf{Mean (ms)} \\
 \midrule
 Evidence storage (dedup) & 0.009 \\
-Claim creation + signing & 0.679 \\
-Trace (100-claim chain) & 1.359 \\
-Effective confidence (single) & 1.304 \\
-Effective confidence (bulk, 100) & 2.435 \\
-Audit (100 claims) & 4.005 \\
-Stats (100 claims) & 3.739 \\
-Verify all signatures (100+) & 43.334 \\
+Claim creation + signing & 0.762 \\
+Trace (100-claim chain) & 1.456 \\
+Effective confidence (single) & 1.357 \\
+Effective confidence (bulk, 100) & 1.875 \\
+Audit (100 claims) & 3.837 \\
+Stats (100 claims) & 3.606 \\
+Verify all signatures (100+) & 43.172 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -365,12 +365,12 @@ The bulk computation is generally faster than individual queries due to memoizat
 We compare the execution time of a bare Python function against the same function wrapped with \texttt{@lattice\_monitor}, measured over 1{,}000 iterations:
 
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-\item \textbf{Bare function:} 0.000235~ms
-\item \textbf{With \texttt{@lattice\_monitor}:} 0.242~ms
-\item \textbf{Absolute overhead:} 0.242~ms per call
+\item \textbf{Bare function:} 0.00022~ms
+\item \textbf{With \texttt{@lattice\_monitor}:} 0.193~ms
+\item \textbf{Absolute overhead:} 0.192~ms per call
 \end{itemize}
 
-The overhead is dominated by claim creation and SQLite I/O, not the decorator mechanism itself. At 0.24~ms per instrumented call, LATTICE adds negligible latency to any function that performs network I/O, API calls, or LLM inference (which typically take 10--1{,}000~ms). The percentage overhead is large only relative to the near-zero cost of the bare function itself.
+The overhead is dominated by claim creation and SQLite I/O, not the decorator mechanism itself. At 0.19~ms per instrumented call, LATTICE adds negligible latency to any function that performs network I/O, API calls, or LLM inference (which typically take 10--1{,}000~ms). The percentage overhead is large only relative to the near-zero cost of the bare function itself.
 
 \subsection{Experiment 6: Case Study}
 
