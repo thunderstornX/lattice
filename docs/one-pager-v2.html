@@ -52,7 +52,7 @@
 <div class="stat-grid">
   <div class="stat"><div class="num">0.65 ms</div><div class="label">Claim creation + signing</div></div>
   <div class="stat"><div class="num">66.9 ms</div><div class="label">10K-node DAG traversal</div></div>
-  <div class="stat"><div class="num">0.23 ms</div><div class="label">Instrumentation overhead</div></div>
+  <div class="stat"><div class="num">0.19 ms</div><div class="label">Instrumentation overhead</div></div>
   <div class="stat"><div class="num">O(n<sup>1.03</sup>)</div><div class="label">Near-linear scaling</div></div>
 </div>
 
@@ -69,7 +69,7 @@
 <div class="col">
 
 <h2>Case Study: OSINT Pipeline</h2>
-<p>Three-agent investigation (Harvester → Analyzer → Reporter) completing in <strong>1.49 ms</strong>:</p>
+<p>Three-agent investigation (Harvester → Analyzer → Reporter) completing in <strong>1.30 ms</strong>:</p>
 <ul>
   <li>9 signed claims across 3 agents, backed by 5 evidence blobs</li>
   <li>7 collection methods (nslookup, WHOIS, HTTP, crt.sh, passive DNS, LLM analysis, synthesis)</li>

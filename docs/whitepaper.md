@@ -229,7 +229,7 @@ Revocation is linear up to ~500 claims, with superlinear growth beyond that due 
 
 ### 4.5 Instrumentation Overhead
 
-Compared to bare function calls, LATTICE's instrumentation adds 0.226 ms of overhead per operation. For a pipeline producing tens to hundreds of claims, the total overhead is measured in milliseconds—negligible compared to network I/O, tool execution, or LLM inference.
+Compared to bare function calls, LATTICE's instrumentation adds 0.193 ms of overhead per operation. For a pipeline producing tens to hundreds of claims, the total overhead is measured in milliseconds—negligible compared to network I/O, tool execution, or LLM inference.
 
 ---
 
@@ -255,7 +255,7 @@ To illustrate LATTICE in practice, we instrument a three-agent OSINT investigati
 
 ### 5.3 Result
 
-The resulting DAG contains 9 claims across 3 agents, with 5 evidence blobs at the leaves. The total pipeline time is 1.49 ms. Running `lattice trace` on the final assessment produces a complete reasoning chain. Running `lattice verify` confirms all signatures are valid.
+The resulting DAG contains 9 claims across 3 agents, with 5 evidence blobs at the leaves. The total pipeline time is 1.30 ms. Running `lattice trace` on the final assessment produces a complete reasoning chain. Running `lattice verify` confirms all signatures are valid.
 
 The audit identifies 1 issue: the final report has a stated confidence of 0.75 but an effective confidence of 0.70 (flagged as inflated confidence). This is because one upstream claim has confidence 0.70, creating a bottleneck that the reporter's stated confidence does not account for. The effective confidence mechanism surfaces this discrepancy automatically.
 
