@@ -72,12 +72,13 @@ def claims(directory: str | None, agent: str | None, limit: int) -> None:
     """List claims."""
     store = _find_store(directory)
     rows = store.list_claims(agent_id=agent, limit=limit)
-    store.close()
     if not rows:
+        store.close()
         console.print("[dim]No claims.[/dim]")
         return
     from lattice.dag import effective_confidence_bulk
     eff = effective_confidence_bulk(store)
+    store.close()
     table = Table(title=f"Claims ({len(rows)})")
     table.add_column("ID", style="cyan", max_width=12)
     table.add_column("Agent", style="green")
@@ -101,9 +102,9 @@ def trace(claim_id: str, directory: str | None) -> None:
     store = _find_store(directory)
     resolved = _resolve_id(store, claim_id)
     chain = dag.trace(store, resolved)
-    store.close()
     from lattice.dag import effective_confidence_bulk
     eff = effective_confidence_bulk(store)
+    store.close()
     console.print(f"\n[bold]Trace: [cyan]{_short(resolved)}[/cyan][/bold]\n")
     for i, c in enumerate(chain):
         indent = "  " * i
