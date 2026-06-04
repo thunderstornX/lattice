@@ -60,3 +60,52 @@ class TestClaim:
         c2 = Claim.from_dict(d)
         assert c.claim_id == c2.claim_id
         assert c.metadata == c2.metadata
+
+
+class TestHashSensitivity:
+    """compute_claim_id must change if ANY content field changes."""
+
+    @pytest.mark.parametrize(
+        "field, val_a, val_b",
+        [
+            ("agent_id", "a", "b"),
+            ("assertion", "x", "y"),
+            ("method", "m1", "m2"),
+            ("timestamp", 1.0, 2.0),
+            ("metadata", {}, {"k": "v"}),
+            ("evidence", ["e1"], ["e1", "e2"]),
+        ],
+    )
+    def test_changing_field_changes_id(self, field, val_a, val_b) -> None:
+        base = dict(agent_id="a", assertion="x", evidence=["e1"], method="m",
+                    timestamp=1.0, metadata={})
+        a = dict(base, **{field: val_a})
+        b = dict(base, **{field: val_b})
+        assert compute_claim_id(**a) != compute_claim_id(**b)
+
+
+class TestBoundariesAndTimestamp:
+    @pytest.mark.parametrize("conf", [0.0, 0.5, 1.0])
+    def test_confidence_boundaries_valid(self, conf: float) -> None:
+        c = Claim.create(agent_id="a", assertion="x", evidence=[], confidence=conf, method="m")
+        assert c.confidence == conf
+
+    def test_zero_timestamp_is_honored(self) -> None:
+        # Regression: timestamp=0.0 (a valid Unix epoch) must NOT be replaced
+        # by time.time() via a falsy `or` — the claim_id must stay reproducible.
+        c = Claim.create(agent_id="a", assertion="x", evidence=[], confidence=0.5,
+                         method="m", timestamp=0.0)
+        assert c.timestamp == 0.0
+
+    def test_evidence_zero_created_at_is_honored(self) -> None:
+        ev = Evidence.create("data", created_at=0.0)
+        assert ev.created_at == 0.0
+
+    def test_from_dict_missing_optional_keys(self) -> None:
+        minimal = {
+            "claim_id": "x" * 64, "agent_id": "a", "assertion": "y",
+            "evidence": [], "confidence": 0.5, "method": "m", "timestamp": 1.0,
+        }
+        c = Claim.from_dict(minimal)
+        assert c.metadata == {}
+        assert c.signature == ""

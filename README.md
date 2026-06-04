@@ -48,7 +48,7 @@ Every node is content-addressed (SHA-256), cryptographically signed (Ed25519), a
 - **Audit** -- flags unsupported claims, low confidence, broken references, and inflated confidence
 - **Local dashboard** -- FastAPI + D3.js visualization, no external dependencies
 - **CLI** -- Rich terminal interface for all operations
-- **91 tests** across all modules
+- **110 tests** across all modules
 
 ## Install
 
@@ -305,7 +305,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-91 tests covering: content addressing, signatures, DAG traversal, revocation waterfall, cycle detection, effective confidence, inflated confidence audit, CLI, dashboard API, and runtime monitoring.
+110 tests covering: content addressing, signatures, DAG traversal, revocation waterfall, cycle detection, effective confidence, inflated confidence audit, CLI, dashboard API, and runtime monitoring.
 
 ## Examples
 

@@ -2,7 +2,6 @@
 
 import pytest
 
-import lattice
 from lattice.exceptions import (
     AlreadyRevokedError,
     ClaimNotFoundError,
@@ -12,36 +11,9 @@ from lattice.store import LatticeStore
 
 
 @pytest.fixture
-def store() -> LatticeStore:
-    return lattice.init(":memory:")
-
-
-@pytest.fixture
-def chain(store: LatticeStore):
-    """Build a 3-claim chain: evidence → claim_a → claim_b → claim_c."""
-    agent = store.agent("analyst", role="analyst")
-
-    eid = store.evidence("raw dns output for example.com")
-
-    claim_a = agent.claim(
-        assertion="example.com resolves to 93.184.216.34",
-        evidence=[eid],
-        confidence=0.99,
-        method="tool:nslookup",
-    )
-    claim_b = agent.claim(
-        assertion="example.com and example.org share infra",
-        evidence=[claim_a.claim_id],
-        confidence=0.85,
-        method="llm:analysis",
-    )
-    claim_c = agent.claim(
-        assertion="Both domains are operated by IANA",
-        evidence=[claim_b.claim_id],
-        confidence=0.70,
-        method="llm:synthesis",
-    )
-    return agent, eid, claim_a, claim_b, claim_c
+def chain(linear_chain):
+    """The shared evidence -> a -> b -> c chain (defined in conftest)."""
+    return linear_chain
 
 
 class TestRevokeClaim:
@@ -135,13 +107,8 @@ class TestListRevocations:
 class TestDiamondDAG:
     """Test a diamond-shaped DAG: A → B, A → C, B → D, C → D."""
 
-    def test_diamond_waterfall(self, store: LatticeStore):
-        agent = store.agent("analyst", role="analyst")
-        a = agent.claim(assertion="Root finding", confidence=0.9, method="tool:scan")
-        b = agent.claim(assertion="Branch B", evidence=[a.claim_id], confidence=0.8, method="llm:analysis")
-        c = agent.claim(assertion="Branch C", evidence=[a.claim_id], confidence=0.8, method="llm:analysis")
-        d = agent.claim(assertion="Conclusion", evidence=[b.claim_id, c.claim_id], confidence=0.7, method="llm:synthesis")
-
+    def test_diamond_waterfall(self, store: LatticeStore, diamond_dag):
+        agent, a, b, c, d = diamond_dag
         result = store.revoke_claim(a.claim_id, agent.agent_id)
         # All of B, C, D should be compromised
         compromised_set = set(result.compromised_claim_ids)

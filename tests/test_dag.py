@@ -30,6 +30,21 @@ class TestTrace:
         with pytest.raises(ClaimNotFoundError):
             trace(store, "0" * 64)
 
+    def test_diamond_visits_each_node_once(self, store: LatticeStore, diamond_dag) -> None:
+        agent, a, b, c, d = diamond_dag
+        chain = trace(store, d.claim_id)
+        ids = [x.claim_id for x in chain]
+        assert len(ids) == len(set(ids)) == 4
+        assert {a.claim_id, b.claim_id, c.claim_id, d.claim_id} == set(ids)
+
+    def test_skips_raw_evidence_leaf(self, store: LatticeStore) -> None:
+        agent = store.agent("bot")
+        eid = store.evidence("raw")
+        c = agent.claim("base", evidence=[eid], method="m")
+        chain = trace(store, c.claim_id)
+        # The raw-evidence hash is not a claim, so trace silently skips it.
+        assert [x.claim_id for x in chain] == [c.claim_id]
+
 
 class TestAudit:
     def test_no_issues(self, store: LatticeStore) -> None:

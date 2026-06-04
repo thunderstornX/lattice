@@ -48,7 +48,7 @@ class Evidence:
             evidence_id=cls.compute_id(data),
             data=data,
             content_type=content_type,
-            created_at=created_at or time.time(),
+            created_at=created_at if created_at is not None else time.time(),
         )
 
 
@@ -124,7 +124,7 @@ class Claim:
         signature: str = "",
     ) -> Claim:
         """Factory with auto-computed content-addressed ID."""
-        ts = timestamp or time.time()
+        ts = timestamp if timestamp is not None else time.time()
         meta = metadata or {}
         cid = compute_claim_id(agent_id, assertion, evidence, method, ts, meta)
         return cls(

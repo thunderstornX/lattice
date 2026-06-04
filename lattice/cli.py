@@ -10,7 +10,7 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from lattice import dag
+from lattice import __version__, dag
 from lattice.store import DB_FILENAME, LATTICE_DIR_NAME, LatticeStore, init_store
 
 console = Console()
@@ -31,7 +31,7 @@ def _short(full_id: str, n: int = 12) -> str:
 
 
 @click.group()
-@click.version_option(version="1.2.0", prog_name="lattice")
+@click.version_option(version=__version__, prog_name="lattice")
 def cli() -> None:
     """LATTICE — Accountability layer for multi-agent AI systems."""
 

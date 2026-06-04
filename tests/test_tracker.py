@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import warnings
 
 from lattice.store import LatticeStore
@@ -71,3 +72,18 @@ class TestTrack:
 
             assert any(issubclass(x.category, DeprecationWarning) for x in w)
             assert any("@track is deprecated" in str(x.message) for x in w)
+
+    def test_warning_not_blamed_on_tracker_module(self, store: LatticeStore) -> None:
+        """stacklevel must point the warning at the caller's source, not at
+        the warnings.warn() line inside tracker.py itself."""
+        agent = store.agent("bot")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            @track(agent=agent)
+            def noop() -> None:
+                """Noop"""
+
+        dep = [x for x in w if issubclass(x.category, DeprecationWarning)]
+        assert dep, "expected a DeprecationWarning"
+        assert os.path.basename(dep[0].filename) != "tracker.py"

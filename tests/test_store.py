@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import sqlite3
+
 import pytest
 
+import lattice
 from lattice.exceptions import AgentNotFoundError, ClaimNotFoundError, CyclicDependencyError, EvidenceNotFoundError
+from lattice.models import Claim
 from lattice.store import LatticeStore
 
 
@@ -110,22 +114,37 @@ class TestCycleDetection:
             store.put_claim(bad_claim)
 
     def test_indirect_cycle_rejected(self, store: LatticeStore) -> None:
-        """A -> B -> C, then C referencing A should be rejected."""
+        """Indirect cycles (A -> B -> C, then C -> A) are rejected.
+
+        A genuine indirect cycle is structurally impossible to build through
+        the normal API: a claim's ID is the SHA-256 of its content, so a
+        descendant can never share an ancestor's ID without a hash preimage.
+        The only way to *attempt* one is to forge a claim that reuses an
+        ancestor's ID while pointing its evidence at a descendant;
+        ``_check_no_cycle`` walks the ancestry and rejects it.
+        """
         agent = store.agent("bot")
         a = agent.claim("claim A", method="m")
         b = agent.claim("claim B", evidence=[a.claim_id], method="m")
-        # Try to create a claim that A depends on B (forming A<-B<-new, where new refs A)
-        # Actually: create C that refs B, then try to update A to ref C
-        # Simpler: create a new claim whose evidence includes B,
-        # and whose claim_id happens to be A's claim_id. That's contrived.
-        # Better test: create C referencing B, then D referencing C,
-        # then try to make a claim whose evidence is D but whose ID is A.
-        # The real scenario: just create a normal chain and verify it works,
-        # then verify the cycle detection fires on self-ref (above test).
-        # Chain A -> B -> C should work fine:
         c = agent.claim("claim C", evidence=[b.claim_id], method="m")
-        chain = store.trace(c.claim_id)
-        assert len(chain) == 3  # C, B, A
+
+        # The legitimate deep chain resolves cleanly.
+        assert len(store.trace(c.claim_id)) == 3
+
+        # Forge a claim that reuses A's ID but depends on its own descendant C.
+        forged = Claim(
+            claim_id=a.claim_id,
+            agent_id=a.agent_id,
+            assertion=a.assertion,
+            evidence=[c.claim_id],
+            confidence=a.confidence,
+            method=a.method,
+            timestamp=a.timestamp,
+            metadata=a.metadata,
+            signature="",
+        )
+        with pytest.raises(CyclicDependencyError):
+            store.put_claim(forged)
 
 
 class TestExport:
@@ -135,3 +154,41 @@ class TestExport:
         data = store.export_json()
         assert data["stats"]["claims"] == 1
         assert len(data["claims"]) == 1
+
+
+class TestPersistence:
+    def test_wal_mode_on_disk(self, file_store: LatticeStore) -> None:
+        mode = file_store._conn.execute("PRAGMA journal_mode").fetchone()[0]
+        assert mode == "wal"
+
+    def test_survives_close_and_reopen(self, tmp_path) -> None:
+        s1 = lattice.init(str(tmp_path))
+        agent = s1.agent("bot", role="r")
+        eid = s1.evidence("raw data")
+        claim = agent.claim("fact", evidence=[eid], confidence=0.7, method="m")
+        cid = claim.claim_id
+        s1.close()
+
+        s2 = lattice.init(str(tmp_path))
+        try:
+            got = s2.get_claim(cid)
+            assert got.assertion == "fact"
+            assert got.confidence == 0.7
+            assert got.evidence == [eid]
+            assert s2.get_evidence(eid).data == "raw data"
+            assert [a["agent_id"] for a in s2.list_agents()] == ["bot"]
+        finally:
+            s2.close()
+
+
+class TestLifecycle:
+    def test_double_close_is_safe(self, tmp_path) -> None:
+        s = lattice.init(str(tmp_path))
+        s.close()
+        s.close()  # must not raise
+
+    def test_use_after_close_raises(self, tmp_path) -> None:
+        s = lattice.init(str(tmp_path))
+        s.close()
+        with pytest.raises(sqlite3.ProgrammingError):
+            s.claim_count()

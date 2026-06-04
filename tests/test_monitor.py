@@ -2,14 +2,8 @@
 
 import pytest
 
-import lattice
 from lattice.monitor import lattice_monitor
 from lattice.store import LatticeStore
-
-
-@pytest.fixture
-def store() -> LatticeStore:
-    return lattice.init(":memory:")
 
 
 @pytest.fixture

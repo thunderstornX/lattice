@@ -9,7 +9,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-All 91 tests should pass before you start.
+All 110 tests should pass before you start.
 
 ## Code Standards
 
